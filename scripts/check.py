@@ -22,7 +22,10 @@ SOURCE_DIRS = ("src", "tests", "scripts")
 """Folders with Python sources."""
 
 TEXT_SUFFIXES = {".py", ".manifest", ".md", ".toml", ".yml", ".yaml", ".txt", ".cfg"}
-"""Files that must be plain ASCII."""
+"""Files that must be plain ASCII, by suffix."""
+
+TEXT_NAMES = {"LICENSE", "NOTICE", ".gitignore", ".gitattributes", ".editorconfig"}
+"""Files that must be plain ASCII, by name."""
 
 SPDX = "# SPDX-License-Identifier: Apache-2.0"
 """First line of every Python source."""
@@ -44,7 +47,7 @@ def text_problems() -> list[str]:
     problems = []
     for path in _files():
         rel = path.relative_to(ROOT).as_posix()
-        if path.suffix not in TEXT_SUFFIXES and path.name not in ("LICENSE", "NOTICE"):
+        if path.suffix not in TEXT_SUFFIXES and path.name not in TEXT_NAMES:
             continue
         data = path.read_bytes()
         try:
