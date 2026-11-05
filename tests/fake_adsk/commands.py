@@ -38,22 +38,79 @@ class CommandInput:
 
 
 class IntegerSpinnerCommandInput(CommandInput):
-    """Integer spinner."""
+    """Integer spinner.
+
+    Like Fusion, the box is redrawn only when ``value`` changes, so text the
+    user typed over it stays until then.
+    """
 
     def __init__(self, input_id: str, name: str, lo: int, hi: int, step: int, value: int) -> None:
         super().__init__(input_id, name)
         self.minimumValue, self.maximumValue, self.spinStep = lo, hi, step
-        self.value = value
+        self._value = int(value)
+        self.text = str(value)
+
+    @property
+    def value(self) -> int:
+        """Last valid value."""
+        return self._value
+
+    @value.setter
+    def value(self, value: int) -> None:
+        if int(value) != self._value:
+            self.text = str(value)
+        self._value = int(value)
+
+    def type_text(self, text: str) -> None:
+        """Type into the box, as the user does."""
+        self.text = text
+        if text.strip().isdigit() and self.minimumValue <= int(text) <= self.maximumValue:
+            self._value = int(text)
 
 
 class ValueCommandInput(CommandInput):
-    """Length input; ``value`` is in internal units (cm)."""
+    """Length input in mm; ``value`` is in internal units (cm).
+
+    Like Fusion, the box shows an expression: setting ``value`` writes it,
+    and setting ``expression`` (what the user types) is evaluated, leaving
+    ``value`` at the last valid number when the text is not one.
+    """
 
     def __init__(self, input_id: str, name: str, units: str, value: Any) -> None:
         super().__init__(input_id, name)
         self.unitType = units
-        self.value = float(value.realValue)
         self.isValidExpression = True
+        self._value = 0.0
+        self._expression = ""
+        self.value = float(value.realValue)
+
+    @property
+    def value(self) -> float:
+        """Value in cm."""
+        return self._value
+
+    @value.setter
+    def value(self, value: float) -> None:
+        if float(value) != self._value or not self._expression:
+            self._expression = "%g mm" % (float(value) * 10)
+            self.isValidExpression = True
+        self._value = float(value)
+
+    @property
+    def expression(self) -> str:
+        """Text in the box."""
+        return self._expression
+
+    @expression.setter
+    def expression(self, text: str) -> None:
+        self._expression = text
+        number = text.strip().removesuffix("mm").strip()
+        try:
+            self._value = float(number) / 10
+        except ValueError:
+            self.isValidExpression = False
+        else:
+            self.isValidExpression = True
 
 
 class BoolValueCommandInput(CommandInput):

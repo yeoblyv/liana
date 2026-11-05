@@ -168,6 +168,18 @@ def test_reset_and_privacy_buttons(h: Harness) -> None:
     assert h.world.messages == []
 
 
+def test_reset_clears_text_typed_over_a_value(h: Harness) -> None:
+    cmd = h.open_dialog()
+    inputs = cmd.commandInputs
+    inputs.itemById("cradles").type_text("xyz")
+    inputs.itemById("cable_d").expression = "abc"
+    assert not cmd.validate()
+    cmd.change(RESET_ID)
+    assert inputs.itemById("cradles").text == str(DEFAULTS["cradles"])
+    assert inputs.itemById("cable_d").expression == "%g mm" % DEFAULTS["cable_d"]
+    assert cmd.validate()
+
+
 def test_open_online_version(h: Harness) -> None:
     cmd = h.open_dialog()
     cmd.change(PRIVACY_ID)

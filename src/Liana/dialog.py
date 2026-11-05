@@ -332,9 +332,16 @@ class SettingsDialog:
             if inp is None:
                 continue
             if kind == "int":
-                inp.value = int(values[key])
+                # Fusion redraws a spinner only when its value changes, so
+                # text typed over it (letters, nothing) would survive a value
+                # equal to the last valid one: step to another value first.
+                wanted = int(values[key])
+                lo, hi = (int(limit) for limit in LIMITS[key])
+                inp.value = lo if wanted != lo else hi
+                inp.value = wanted
             elif kind == "mm":
-                inp.value = float(values[key]) * MM
+                # the expression, not the value, for the same reason
+                inp.expression = "%g mm" % float(values[key])
             elif kind == "bool":
                 inp.value = bool(values[key])
             else:
