@@ -30,5 +30,9 @@ Please report security problems privately, not in a public issue:
 - by email to xineraman8@gmail.com.
 
 Include the Liana version (shown in the dialog), the Fusion version, your
-operating system and the steps to reproduce. Please allow time for a fix
-before disclosing the problem publicly.
+operating system and the steps to reproduce.
+
+You get an acknowledgement within 7 days and an assessment within 30 days.
+Please keep the problem private until a fixed release is out; the
+changelog and a GitHub security advisory then describe it and credit you
+if you wish.

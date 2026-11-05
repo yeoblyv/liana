@@ -43,6 +43,12 @@ def ext_sym(comp: Component, sketch: ParamSketch, op: object, dist: str) -> Feat
 
     Cuts use a bounded distance rather than "All", so they stay inside the
     part's own bodies.
+
+    Args:
+        comp: Component of the sketch.
+        sketch: Sketch with the profiles.
+        op: Feature operation (new body, join or cut).
+        dist: Total distance expression.
     """
     extrudes = comp.features.extrudeFeatures
     ext_input = extrudes.createInput(sketch.profiles(), op)
@@ -117,6 +123,10 @@ def ext_one(
 def combine(comp: Component, probe: Vec3) -> Feature | None:
     """Join every body of a component into the one that contains ``probe``.
 
+    Args:
+        comp: Component with the bodies.
+        probe: Point in mm inside the body that receives the others.
+
     Returns:
         The combine feature, or None when there is only one body.
     """
@@ -136,7 +146,11 @@ def combine(comp: Component, probe: Vec3) -> Feature | None:
 
 
 def line_edges(bs: Sequence[BRepBody]) -> Iterator[tuple[BRepEdge, Point, Point]]:
-    """Yield the straight edges of some bodies with their end points."""
+    """Yield the straight edges of some bodies with their end points.
+
+    Args:
+        bs: Bodies to search.
+    """
     line_type = adsk.core.Line3D.classType()
     for b in bs:
         for i in range(b.edges.count):
@@ -186,7 +200,13 @@ def y_edges(bs: Sequence[BRepBody], pts: Sequence[Pt2], tol: float = 0.02) -> li
 
 
 def face_edges_at_y(bs: Sequence[BRepBody], y: float, tol: float = 0.01) -> list[BRepEdge]:
-    """Return every edge, straight or curved, that lies in the plane ``Y = y`` (mm)."""
+    """Return every edge, straight or curved, that lies in the plane ``Y = y`` (mm).
+
+    Args:
+        bs: Bodies to search.
+        y: Height of the plane in mm.
+        tol: Match tolerance in mm.
+    """
     out = []
     for b in bs:
         for i in range(b.edges.count):
@@ -227,12 +247,22 @@ def end_face_edges(
 
 
 def sym(x: float, y: float) -> list[Pt2]:
-    """Return a point and its mirror image across X = 0."""
+    """Return a point and its mirror image across X = 0.
+
+    Args:
+        x: X in mm.
+        y: Second coordinate in mm.
+    """
     return [(x, y), (-x, y)]
 
 
 def corners(x: float, z: float) -> list[Pt2]:
-    """Return the four corners of a rectangle centered on the origin."""
+    """Return the four corners of a rectangle centered on the origin.
+
+    Args:
+        x: Half-width in mm.
+        z: Half-depth in mm.
+    """
     return [(x, z), (-x, z), (x, -z), (-x, -z)]
 
 
@@ -241,6 +271,11 @@ def corners(x: float, z: float) -> list[Pt2]:
 
 def fillet(comp: Component, edges: Sequence[BRepEdge], radius: str) -> Feature:
     """Round edges with a constant radius.
+
+    Args:
+        comp: Component of the edges.
+        edges: Edges to round.
+        radius: Radius expression.
 
     Raises:
         RuntimeError: No edges were given.
@@ -259,6 +294,11 @@ def fillet(comp: Component, edges: Sequence[BRepEdge], radius: str) -> Feature:
 
 def chamfer(comp: Component, edges: Sequence[BRepEdge], dist: str) -> Feature:
     """Chamfer edges with an equal distance.
+
+    Args:
+        comp: Component of the edges.
+        edges: Edges to chamfer.
+        dist: Distance expression.
 
     Raises:
         RuntimeError: No edges were given.

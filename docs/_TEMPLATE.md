@@ -1,22 +1,59 @@
 ---
-title: Page title in sentence case
-summary: One sentence on what the reader gets from this page.
-audience: users | contributors
-updated: YYYY-MM-DD
+id: category.page-name
+title: Page title
+slug: /category/page-name
+category: Category
+since: 1.0.0
+status: draft
 ---
 
-# Page title in sentence case
+[Docs](../README.md) / [Category](README.md) / Page title
 
-One or two sentences: what this page covers and who it is for.
+# Page title
 
-## First task or topic
+![status](https://img.shields.io/badge/status-draft-lightgrey)
+![since](https://img.shields.io/badge/since-1.0.0-5b4fe0)
+
+One paragraph: what this page covers, for whom, and what the reader can do
+after reading it.
+
+## On this page
+
+- [First topic](#first-topic)
+- [Examples](#examples)
+- [API links](#api-links)
+- [See also](#see-also)
+- [References](#references)
+- [Changelog](#changelog)
+
+## First topic
 
 Short paragraphs. Steps as a numbered list, one action per step. Name
 Fusion commands exactly as the menu shows them, in bold:
 **Utilities > Add-Ins > Scripts and Add-Ins**.
 
-Claims that rest on outside material cite it as [R1].
+A statement that relies on another page cites it [R1].
+
+> **Note.** Non-critical clarification.
+
+## Examples
+
+```sh
+python scripts/check.py
+```
+
+## API links
+
+- [`Liana.core.settings`](../api/Liana.core.settings.md)
+
+## See also
+
+- [Architecture overview](../architecture/overview.md): related page.
 
 ## References
 
-- [R1] Author, "Title", URL. See also [references.md](references.md).
+- [R1]: ../architecture/overview.md#how-a-build-runs "Architecture overview - How a build runs"
+
+## Changelog
+
+- 1.0.0: page added.

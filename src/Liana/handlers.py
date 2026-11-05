@@ -37,7 +37,11 @@ class CommandCreated(adsk.core.CommandCreatedEventHandler):  # type: ignore[misc
         self._on_error = on_error
 
     def notify(self, args: Any) -> None:
-        """Pass the event arguments to the callback."""
+        """Pass the event arguments to the callback.
+
+        Args:
+            args: Event arguments from Fusion.
+        """
         try:
             self._callback(args)
         except Exception:  # report anything rather than lose it inside Fusion
@@ -59,7 +63,11 @@ class InputChanged(adsk.core.InputChangedEventHandler):  # type: ignore[misc]  #
         self._on_error = on_error
 
     def notify(self, args: Any) -> None:
-        """Pass the event arguments to the callback."""
+        """Pass the event arguments to the callback.
+
+        Args:
+            args: Event arguments from Fusion.
+        """
         try:
             self._callback(args)
         except Exception:  # report anything rather than lose it inside Fusion
@@ -79,7 +87,11 @@ class ValidateInputs(adsk.core.ValidateInputsEventHandler):  # type: ignore[misc
         self._callback = callback
 
     def notify(self, args: Any) -> None:
-        """Set ``args.areInputsValid`` from the callback."""
+        """Set ``args.areInputsValid`` from the callback.
+
+        Args:
+            args: Event arguments from Fusion.
+        """
         try:
             args.areInputsValid = self._callback()
         except Exception:  # an input that cannot be read is not valid
@@ -101,7 +113,11 @@ class CommandExecute(adsk.core.CommandEventHandler):  # type: ignore[misc]  # un
         self._on_error = on_error
 
     def notify(self, args: Any) -> None:
-        """Pass the event arguments to the callback."""
+        """Pass the event arguments to the callback.
+
+        Args:
+            args: Event arguments from Fusion.
+        """
         try:
             self._callback(args)
         except Exception:  # report anything rather than lose it inside Fusion
@@ -123,7 +139,11 @@ class CustomEvent(adsk.core.CustomEventHandler):  # type: ignore[misc]  # untype
         self._on_error = on_error
 
     def notify(self, args: Any) -> None:
-        """Pass the event arguments to the callback."""
+        """Pass the event arguments to the callback.
+
+        Args:
+            args: Event arguments from Fusion.
+        """
         try:
             self._callback(args)
         except Exception:  # report anything rather than lose it inside Fusion

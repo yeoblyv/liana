@@ -21,7 +21,12 @@ _LOAD_ERRORS: tuple[type[Exception], ...] = (*API_ERRORS, ValueError)  # ValueEr
 
 
 def tag(occ: Occurrence, place: str) -> None:
-    """Mark an occurrence with its role, e.g. ``"seat:S"``."""
+    """Mark an occurrence with its role, e.g. ``"seat:S"``.
+
+    Args:
+        occ: Occurrence to mark.
+        place: Role, e.g. ``"holder:"`` or ``"seat:S"``.
+    """
     occ.attributes.add(ATTR_GROUP, "place", place)
 
 
@@ -44,7 +49,11 @@ def new_comp(parent: Component, name: str, place: str | None = None) -> Occurren
 
 
 def find_system(design: Design | None) -> Occurrence | None:
-    """Return the Liana system occurrence of a design, if there is one."""
+    """Return the Liana system occurrence of a design, if there is one.
+
+    Args:
+        design: Design to search, or None.
+    """
     if not design:
         return None
     root = design.rootComponent
@@ -59,6 +68,9 @@ def load_design_settings(design: Design) -> Settings | None:
     """Return the settings stored in a design, or None if there are none.
 
     The stored JSON is untrusted: the design may come from anyone.
+
+    Args:
+        design: Design that may hold a system.
     """
     try:
         attr = design.attributes.itemByName(ATTR_GROUP, "settings")
@@ -73,7 +85,12 @@ def load_design_settings(design: Design) -> Settings | None:
 
 
 def save_design_settings(design: Design, s: Settings) -> None:
-    """Store the settings in the design, so running Liana again edits it."""
+    """Store the settings in the design, so running Liana again edits it.
+
+    Args:
+        design: Design that holds the system.
+        s: Settings of the system.
+    """
     try:
         design.attributes.add(ATTR_GROUP, "settings", json.dumps(s))
     except API_ERRORS:
@@ -169,7 +186,11 @@ def upsert_params(design: Design, s: Settings) -> int:
 
 
 def is_hybrid(design: Design) -> bool:
-    """Return whether a design can hold several components (hybrid intent)."""
+    """Return whether a design can hold several components (hybrid intent).
+
+    Args:
+        design: Design to check.
+    """
     try:
         return bool(design.designIntent == adsk.fusion.DesignIntentTypes.HybridDesignIntentType)
     except AttributeError:
@@ -177,13 +198,21 @@ def is_hybrid(design: Design) -> bool:
 
 
 def is_empty(design: Design) -> bool:
-    """Return whether the root component has no occurrences, bodies or sketches."""
+    """Return whether the root component has no occurrences, bodies or sketches.
+
+    Args:
+        design: Design to check.
+    """
     root = design.rootComponent
     return not (root.occurrences.count or root.bRepBodies.count or root.sketches.count)
 
 
 def new_design(app: Application) -> Design:
-    """Open a new hybrid design document and return its design."""
+    """Open a new hybrid design document and return its design.
+
+    Args:
+        app: Fusion application.
+    """
     doc = app.documents.add(adsk.core.DocumentTypes.FusionDesignDocumentType)
     design = adsk.fusion.Design.cast(doc.products.itemByProductType("DesignProductType"))
     try:

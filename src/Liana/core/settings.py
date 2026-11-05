@@ -137,6 +137,9 @@ def finite_number(value: object) -> float | None:
 
     Booleans, strings, NaN, infinities and integers too large for a float
     are rejected, so untrusted JSON cannot smuggle them into the arithmetic.
+
+    Args:
+        value: Value from JSON.
     """
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         return None
@@ -213,7 +216,12 @@ def from_mapping(raw: object, within_limits: bool = False) -> Settings:
 
 
 def in_limits(key: str, value: float) -> bool:
-    """Return whether a value is inside the dialog limits of its setting."""
+    """Return whether a value is inside the dialog limits of its setting.
+
+    Args:
+        key: Settings key.
+        value: Value to check.
+    """
     if key not in LIMITS:
         return True
     lo, hi = LIMITS[key]

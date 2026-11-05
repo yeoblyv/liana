@@ -96,7 +96,12 @@ def part_appearance(app: Application, design: Design, name: str, rgb: tuple[int,
 
 
 def paint_parts(app: Application, design: Design) -> None:
-    """Color every Liana part of the design: rail red, comb green, frame blue."""
+    """Color every Liana part of the design: rail red, comb green, frame blue.
+
+    Args:
+        app: Fusion application.
+        design: Design with the Liana parts.
+    """
     for i in range(design.allComponents.count):
         comp = design.allComponents.item(i)
         if comp.name in PART_COLORS and comp.bRepBodies.count:

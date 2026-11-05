@@ -66,7 +66,11 @@ class Progress:
         self._step = 0
 
     def start(self, total: int) -> None:
-        """Show the dialog for a build of ``total`` steps."""
+        """Show the dialog for a build of ``total`` steps.
+
+        Args:
+            total: Number of steps the build reports.
+        """
         self._step = 0
         self._active = False
         if self._ui is None:
@@ -82,7 +86,11 @@ class Progress:
             self._active = False  # build without progress feedback
 
     def step(self, message: str) -> None:
-        """Advance by one step and show what is being built."""
+        """Advance by one step and show what is being built.
+
+        Args:
+            message: What is being built now.
+        """
         self._step += 1
         if not self._active:
             return
@@ -118,7 +126,12 @@ def _matrix(angle_deg: float, tx: float, ty: float, tz: float) -> object:
 
 
 def seat_matrix(ctx: BuildContext, side: Side) -> object:
-    """Return the transform that puts a holder under one side of the frame."""
+    """Return the transform that puts a holder under one side of the frame.
+
+    Args:
+        ctx: Build context.
+        side: Frame side.
+    """
     a, ft, fz = ctx.ev("FRAME_A"), ctx.ev("FRAME_T"), ctx.ev("FRAME_Z")
     offsets: dict[Side, tuple[float, float]] = {
         "S": (0.0, a),
@@ -135,6 +148,12 @@ def seat_holders(ctx: BuildContext, system: Component, holder: Component, s: Set
 
     Each copy is inserted straight at its final position; moving occurrences
     afterwards would rely on position snapshots that do not survive recompute.
+
+    Args:
+        ctx: Build context.
+        system: System component.
+        holder: Holder component to copy.
+        s: Settings with the mount option.
     """
     if not (s["make_frame"] and s["make_holder"]):
         return
@@ -144,7 +163,13 @@ def seat_holders(ctx: BuildContext, system: Component, holder: Component, s: Set
 
 
 def reseat_holders(ctx: BuildContext, system_occ: Occurrence, s: Settings) -> None:
-    """Replace the holder copies on the frame after a size change."""
+    """Replace the holder copies on the frame after a size change.
+
+    Args:
+        ctx: Build context.
+        system_occ: System occurrence.
+        s: Settings with the mount option.
+    """
     system = system_occ.component
     holder = None
     seats = []

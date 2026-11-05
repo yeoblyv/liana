@@ -86,17 +86,31 @@ CUT = adsk.fusion.FeatureOperations.CutFeatureOperation
 
 
 def value(expr: str) -> Any:
-    """Return a ``ValueInput`` for an expression."""
+    """Return a ``ValueInput`` for an expression.
+
+    Args:
+        expr: Fusion expression, e.g. ``"DEPTH + 2 mm"``.
+    """
     return adsk.core.ValueInput.createByString(expr)
 
 
 def point(x: float, y: float, z: float) -> Point:
-    """Return a ``Point3D`` from millimeter coordinates."""
+    """Return a ``Point3D`` from millimeter coordinates.
+
+    Args:
+        x: X in mm.
+        y: Y in mm.
+        z: Z in mm.
+    """
     return adsk.core.Point3D.create(x * MM, y * MM, z * MM)
 
 
 def collection(items: Iterable[Any]) -> Any:
-    """Return an ``ObjectCollection`` holding ``items`` in order."""
+    """Return an ``ObjectCollection`` holding ``items`` in order.
+
+    Args:
+        items: API objects, in the order they should keep.
+    """
     oc = adsk.core.ObjectCollection.create()
     for item in items:
         oc.add(item)
@@ -104,12 +118,21 @@ def collection(items: Iterable[Any]) -> Any:
 
 
 def bodies(comp: Component) -> list[BRepBody]:
-    """Return the bodies of a component."""
+    """Return the bodies of a component.
+
+    Args:
+        comp: Component.
+    """
     return [comp.bRepBodies.item(i) for i in range(comp.bRepBodies.count)]
 
 
 def is_inside(body: BRepBody, p: tuple[float, float, float]) -> bool:
-    """Return whether a point in millimeters lies inside a body."""
+    """Return whether a point in millimeters lies inside a body.
+
+    Args:
+        body: Body to test.
+        p: Point ``(x, y, z)`` in mm.
+    """
     return bool(
         body.pointContainment(point(*p))
         == adsk.fusion.PointContainment.PointInsidePointContainment
@@ -117,10 +140,19 @@ def is_inside(body: BRepBody, p: tuple[float, float, float]) -> bool:
 
 
 def inside(comp: Component, p: tuple[float, float, float]) -> bool:
-    """Return whether a point in millimeters lies inside any body of a component."""
+    """Return whether a point in millimeters lies inside any body of a component.
+
+    Args:
+        comp: Component whose bodies are tested.
+        p: Point ``(x, y, z)`` in mm.
+    """
     return any(is_inside(b, p) for b in bodies(comp))
 
 
 def first_line(error: BaseException) -> str:
-    """Return the first line of an exception message, for logs."""
+    """Return the first line of an exception message, for logs.
+
+    Args:
+        error: Exception to describe.
+    """
     return str(error).strip().split("\n")[0]

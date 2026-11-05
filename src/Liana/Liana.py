@@ -22,7 +22,11 @@ _addin: LianaAddIn | None = None
 
 
 def run(context: object) -> None:
-    """Start the add-in (called by Fusion)."""
+    """Start the add-in (called by Fusion).
+
+    Args:
+        context: Start-up information from Fusion; not used.
+    """
     global _addin
     if _addin is not None:
         _addin.stop()
@@ -38,6 +42,9 @@ def stop(context: object) -> None:
     The add-in's other modules are dropped from the import cache, so that
     Run after an update loads the new code instead of the modules Python
     kept in memory.
+
+    Args:
+        context: Shut-down information from Fusion; not used.
     """
     global _addin
     if _addin is not None:

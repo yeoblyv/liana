@@ -111,7 +111,11 @@ class Storage:
 
     @classmethod
     def for_user(cls, legacy_folder: Path | None = None) -> Storage:
-        """Return the store in the current user's data folder."""
+        """Return the store in the current user's data folder.
+
+        Args:
+            legacy_folder: Optional folder to read old settings from.
+        """
         return cls(default_data_dir(sys.platform, os.environ, Path.home()), legacy_folder)
 
     @property
@@ -145,6 +149,9 @@ class Storage:
     def save_settings(self, s: Settings) -> bool:
         """Store the dialog settings.
 
+        Args:
+            s: Settings to store.
+
         Returns:
             Whether the file was written.
         """
@@ -156,6 +163,9 @@ class Storage:
 
     def write_log(self, text: str) -> Path | None:
         """Write the build log.
+
+        Args:
+            text: Log text.
 
         Returns:
             The log path, or None if it could not be written.

@@ -30,7 +30,11 @@ class BuildContext:
     log: BuildLog = field(default_factory=BuildLog)
 
     def ev(self, expr: str) -> float:
-        """Evaluate an expression against the design parameters, in mm."""
+        """Evaluate an expression against the design parameters, in mm.
+
+        Args:
+            expr: Expression of User Parameters, with units.
+        """
         return float(self.design.unitsManager.evaluateExpression(expr, "mm")) / MM
 
     def mag(self, expr: str) -> tuple[str, float]:
@@ -38,6 +42,9 @@ class BuildContext:
 
         Sketch dimensions are always positive, so a negative coordinate is
         driven by its negation.
+
+        Args:
+            expr: Expression of a coordinate.
         """
         v = self.ev(expr)
         return (expr, v) if v >= 0 else (neg(expr), -v)

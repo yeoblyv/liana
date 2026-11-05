@@ -225,7 +225,14 @@ class ParamSketch:
         self._log_dim("coord axis %d" % axis, expr, " / ".join(errs))
 
     def dim_between(self, a: SketchPoint, b: SketchPoint, axis: int, expr: str) -> None:
-        """Drive the distance between two points along a model axis."""
+        """Drive the distance between two points along a model axis.
+
+        Args:
+            a: First point.
+            b: Second point.
+            axis: Model axis of the distance.
+            expr: Distance expression; a negative value is driven by its negation.
+        """
         magnitude, _ = self.ctx.mag(expr)
         try:
             d = self._dims.addDistanceDimension(
@@ -245,7 +252,14 @@ class ParamSketch:
     # ------------------------------------------------------------ shapes
 
     def rect(self, u0: str, v0: str, u1: str, v1: str) -> None:
-        """Draw an axis-aligned rectangle between two opposite corners."""
+        """Draw an axis-aligned rectangle between two opposite corners.
+
+        Args:
+            u0: First corner, first coordinate.
+            v0: First corner, second coordinate.
+            u1: Opposite corner, first coordinate.
+            v1: Opposite corner, second coordinate.
+        """
         a, b, c, d = (
             self._sketch_point(u0, v0),
             self._sketch_point(u1, v0),
@@ -268,6 +282,12 @@ class ParamSketch:
         """Draw a right triangle with the corner at ``(uc, vc)``.
 
         The legs end at ``(ue, vc)`` and ``(uc, ve)``.
+
+        Args:
+            uc: Corner, first coordinate.
+            vc: Corner, second coordinate.
+            ue: End of the first leg.
+            ve: End of the second leg.
         """
         a, b, c = (
             self._sketch_point(uc, vc),
@@ -286,7 +306,13 @@ class ParamSketch:
         self.dim_between(corner, l2.endSketchPoint, self.iv, diff(ve, vc))
 
     def circle(self, uc: str, vc: str, dia: str) -> SketchCircle:
-        """Draw a circle with a driven center and diameter."""
+        """Draw a circle with a driven center and diameter.
+
+        Args:
+            uc: Center, first coordinate.
+            vc: Center, second coordinate.
+            dia: Diameter expression.
+        """
         c = self.sk.sketchCurves.sketchCircles.addByCenterRadius(
             self._sketch_point(uc, vc), self.ctx.ev(dia) / 2 * MM
         )
@@ -303,7 +329,11 @@ class ParamSketch:
         return c
 
     def polygon(self, pts: Outline) -> list[SketchLine]:
-        """Draw a closed polygon; every vertex is dimensioned."""
+        """Draw a closed polygon; every vertex is dimensioned.
+
+        Args:
+            pts: Vertices in order; the polygon is closed automatically.
+        """
         sketch_pts = [self._sketch_point(u, v) for u, v in pts]
         lines: list[SketchLine] = []
         for i in range(len(sketch_pts)):
@@ -316,7 +346,12 @@ class ParamSketch:
         return lines
 
     def point(self, u: str, v: str) -> SketchPoint:
-        """Add a driven sketch point."""
+        """Add a driven sketch point.
+
+        Args:
+            u: First coordinate.
+            v: Second coordinate.
+        """
         p = self.sk.sketchPoints.add(self._sketch_point(u, v))
         self.dim_coord(p, self.iu, u)
         self.dim_coord(p, self.iv, v)
@@ -345,6 +380,11 @@ def plane_y(ctx: BuildContext, comp: Component, y_expr: str) -> ConstructionPlan
 
     The XZ plane itself is returned for a zero offset; any other plane is a
     hidden offset construction plane driven by the expression.
+
+    Args:
+        ctx: Build context.
+        comp: Component that owns the plane.
+        y_expr: Height of the plane.
     """
     base = comp.xZConstructionPlane
     if abs(ctx.ev(y_expr)) < 1e-6:
@@ -359,7 +399,12 @@ def plane_y(ctx: BuildContext, comp: Component, y_expr: str) -> ConstructionPlan
 
 
 def plane_z(comp: Component, z_expr: str) -> ConstructionPlane:
-    """Return a hidden plane parallel to XY at ``Z = z_expr``."""
+    """Return a hidden plane parallel to XY at ``Z = z_expr``.
+
+    Args:
+        comp: Component that owns the plane.
+        z_expr: Position of the plane along Z.
+    """
     base = comp.xYConstructionPlane
     n = base.geometry.normal
     plane_input = comp.constructionPlanes.createInput()

@@ -210,12 +210,20 @@ KINDS: dict[str, FieldKind] = {f.key: f.kind for g in GROUPS for f in g.fields}
 
 
 def mount_label(key: Mount) -> str:
-    """Return the dialog label of a mount option."""
+    """Return the dialog label of a mount option.
+
+    Args:
+        key: Mount option.
+    """
     return next(label for k, label, _ in MOUNTS if k == key)
 
 
 def mount_key(label: str | None) -> Mount:
-    """Return the mount option for a dialog label (``"none"`` if unknown)."""
+    """Return the mount option for a dialog label (``"none"`` if unknown).
+
+    Args:
+        label: Dialog label, or None when nothing is selected.
+    """
     return next((k for k, lbl, _ in MOUNTS if label is not None and lbl == label), "none")
 
 
@@ -313,7 +321,11 @@ class SettingsDialog:
         return from_mapping(values)
 
     def write(self, s: Settings) -> None:
-        """Show the given settings in the dialog."""
+        """Show the given settings in the dialog.
+
+        Args:
+            s: Settings to show.
+        """
         values = cast(Mapping[str, Any], s)
         for key, kind in KINDS.items():
             inp = self._inputs.get(key)
@@ -332,7 +344,11 @@ class SettingsDialog:
                     item.isSelected = item.name == wanted
 
     def problems(self, s: Settings) -> list[str]:
-        """Return what prevents building the settings."""
+        """Return what prevents building the settings.
+
+        Args:
+            s: Settings to check.
+        """
         return problems(s, fit_report(s).ok)
 
     def refresh(self, s: Settings | None = None) -> bool:
@@ -363,7 +379,11 @@ class SettingsDialog:
         return not self.problems(self.read())
 
     def input_changed(self, input_id: str) -> None:
-        """React to a changed input: buttons act, then the summary is refreshed."""
+        """React to a changed input: buttons act, then the summary is refreshed.
+
+        Args:
+            input_id: Id of the input that changed.
+        """
         if input_id == RESET_ID:
             self.write(DEFAULTS)
         elif input_id == PRIVACY_ID:

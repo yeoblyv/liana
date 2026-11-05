@@ -1,74 +1,151 @@
+---
+id: api.liana.cad.api
+title: Liana.cad.api
+slug: /api/Liana.cad.api
+category: API
+since: 1.0.0
+status: stable
+---
+
+[Docs](../README.md) / [API](README.md) / `Liana.cad.api`
+
 # `Liana.cad.api`
+
+![status](https://img.shields.io/badge/status-stable-2ea44f)
+![since](https://img.shields.io/badge/since-1.0.0-5b4fe0)
 
 Thin helpers over the Fusion API used by every builder.
 
-The ``adsk`` package ships without type information, so its objects are typed
-as :data:`typing.Any` through the aliases below; the aliases document which
+The `adsk` package ships without type information, so its objects are typed
+as `typing.Any` through the aliases below; the aliases document which
 Fusion class a value is expected to be.
+
+## On this page
+
+- [Constants](#constants)
+  - [`Application`](#liana-cad-api-const-application)
+  - [`UserInterface`](#liana-cad-api-const-userinterface)
+  - [`Design`](#liana-cad-api-const-design)
+  - [`Component`](#liana-cad-api-const-component)
+  - [`Occurrence`](#liana-cad-api-const-occurrence)
+  - [`ConstructionPlane`](#liana-cad-api-const-constructionplane)
+  - [`Sketch`](#liana-cad-api-const-sketch)
+  - [`SketchPoint`](#liana-cad-api-const-sketchpoint)
+  - [`SketchLine`](#liana-cad-api-const-sketchline)
+  - [`SketchCircle`](#liana-cad-api-const-sketchcircle)
+  - [`Feature`](#liana-cad-api-const-feature)
+  - [`BRepBody`](#liana-cad-api-const-brepbody)
+  - [`BRepEdge`](#liana-cad-api-const-brepedge)
+  - [`Point`](#liana-cad-api-const-point)
+  - [`MM`](#liana-cad-api-const-mm)
+  - [`API_ERRORS`](#liana-cad-api-const-api-errors)
+  - [`NEW_BODY`](#liana-cad-api-const-new-body)
+  - [`JOIN`](#liana-cad-api-const-join)
+  - [`CUT`](#liana-cad-api-const-cut)
+- [Functions](#functions)
+  - [`value`](#liana-cad-api-value)
+  - [`point`](#liana-cad-api-point)
+  - [`collection`](#liana-cad-api-collection)
+  - [`bodies`](#liana-cad-api-bodies)
+  - [`is_inside`](#liana-cad-api-is-inside)
+  - [`inside`](#liana-cad-api-inside)
+  - [`first_line`](#liana-cad-api-first-line)
+- [See also](#see-also)
+- [Changelog](#changelog)
 
 ## Constants
 
-### `Application`
+### `Application` {#liana-cad-api-const-application}
 
-``adsk.core.Application``.
+`adsk.core.Application`.
 
-### `UserInterface`
+**Since** 1.0.0
 
-``adsk.core.UserInterface``.
+### `UserInterface` {#liana-cad-api-const-userinterface}
 
-### `Design`
+`adsk.core.UserInterface`.
 
-``adsk.fusion.Design``.
+**Since** 1.0.0
 
-### `Component`
+### `Design` {#liana-cad-api-const-design}
 
-``adsk.fusion.Component``.
+`adsk.fusion.Design`.
 
-### `Occurrence`
+**Since** 1.0.0
 
-``adsk.fusion.Occurrence``.
+### `Component` {#liana-cad-api-const-component}
 
-### `ConstructionPlane`
+`adsk.fusion.Component`.
 
-``adsk.fusion.ConstructionPlane``.
+**Since** 1.0.0
 
-### `Sketch`
+### `Occurrence` {#liana-cad-api-const-occurrence}
 
-``adsk.fusion.Sketch``.
+`adsk.fusion.Occurrence`.
 
-### `SketchPoint`
+**Since** 1.0.0
 
-``adsk.fusion.SketchPoint``.
+### `ConstructionPlane` {#liana-cad-api-const-constructionplane}
 
-### `SketchLine`
+`adsk.fusion.ConstructionPlane`.
 
-``adsk.fusion.SketchLine``.
+**Since** 1.0.0
 
-### `SketchCircle`
+### `Sketch` {#liana-cad-api-const-sketch}
 
-``adsk.fusion.SketchCircle``.
+`adsk.fusion.Sketch`.
 
-### `Feature`
+**Since** 1.0.0
 
-Any timeline feature, e.g. ``adsk.fusion.ExtrudeFeature``.
+### `SketchPoint` {#liana-cad-api-const-sketchpoint}
 
-### `BRepBody`
+`adsk.fusion.SketchPoint`.
 
-``adsk.fusion.BRepBody``.
+**Since** 1.0.0
 
-### `BRepEdge`
+### `SketchLine` {#liana-cad-api-const-sketchline}
 
-``adsk.fusion.BRepEdge``.
+`adsk.fusion.SketchLine`.
 
-### `Point`
+**Since** 1.0.0
 
-``adsk.core.Point3D``.
+### `SketchCircle` {#liana-cad-api-const-sketchcircle}
 
-### `MM`
+`adsk.fusion.SketchCircle`.
+
+**Since** 1.0.0
+
+### `Feature` {#liana-cad-api-const-feature}
+
+Any timeline feature, e.g. `adsk.fusion.ExtrudeFeature`.
+
+**Since** 1.0.0
+
+### `BRepBody` {#liana-cad-api-const-brepbody}
+
+`adsk.fusion.BRepBody`.
+
+**Since** 1.0.0
+
+### `BRepEdge` {#liana-cad-api-const-brepedge}
+
+`adsk.fusion.BRepEdge`.
+
+**Since** 1.0.0
+
+### `Point` {#liana-cad-api-const-point}
+
+`adsk.core.Point3D`.
+
+**Since** 1.0.0
+
+### `MM` {#liana-cad-api-const-mm}
 
 One millimeter in Fusion internal units (centimetres).
 
-### `API_ERRORS`
+**Since** 1.0.0
+
+### `API_ERRORS` {#liana-cad-api-const-api-errors}
 
 Exceptions that mean "Fusion refused this call".
 
@@ -77,58 +154,114 @@ method or property is missing in an older release. Its bindings raise
 NotImplementedError when no overload matches the arguments, and TypeError or
 ValueError when an argument cannot be converted.
 
-### `NEW_BODY`
+**Since** 1.0.0
+
+### `NEW_BODY` {#liana-cad-api-const-new-body}
 
 Feature operation that creates a new body.
 
-### `JOIN`
+**Since** 1.0.0
+
+### `JOIN` {#liana-cad-api-const-join}
 
 Feature operation that adds to the existing body.
 
-### `CUT`
+**Since** 1.0.0
+
+### `CUT` {#liana-cad-api-const-cut}
 
 Feature operation that removes material.
 
+**Since** 1.0.0
+
 ## Functions
 
-### `value(expr: str) -> Any`
+### `value(expr: str) -> Any` {#liana-cad-api-value}
 
-```text
-Return a ``ValueInput`` for an expression.
-```
+Return a `ValueInput` for an expression.
 
-### `point(x: float, y: float, z: float) -> Point`
+| Parameter | Type | Description |
+|---|---|---|
+| `expr` | `str` | Fusion expression, e.g. `"DEPTH + 2 mm"`. |
 
-```text
-Return a ``Point3D`` from millimeter coordinates.
-```
+**Returns** `Any`  
+**Since** 1.0.0
 
-### `collection(items: Iterable[Any]) -> Any`
+### `point(x: float, y: float, z: float) -> Point` {#liana-cad-api-point}
 
-```text
-Return an ``ObjectCollection`` holding ``items`` in order.
-```
+Return a `Point3D` from millimeter coordinates.
 
-### `bodies(comp: Component) -> list[BRepBody]`
+| Parameter | Type | Description |
+|---|---|---|
+| `x` | `float` | X in mm. |
+| `y` | `float` | Y in mm. |
+| `z` | `float` | Z in mm. |
 
-```text
+**Returns** `Point`  
+**Since** 1.0.0
+
+### `collection(items: Iterable[Any]) -> Any` {#liana-cad-api-collection}
+
+Return an `ObjectCollection` holding `items` in order.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `items` | `Iterable[Any]` | API objects, in the order they should keep. |
+
+**Returns** `Any`  
+**Since** 1.0.0
+
+### `bodies(comp: Component) -> list[BRepBody]` {#liana-cad-api-bodies}
+
 Return the bodies of a component.
-```
 
-### `is_inside(body: BRepBody, p: tuple[float, float, float]) -> bool`
+| Parameter | Type | Description |
+|---|---|---|
+| `comp` | `Component` | Component. |
 
-```text
+**Returns** `list[BRepBody]`  
+**Since** 1.0.0
+
+### `is_inside(body: BRepBody, p: tuple[float, float, float]) -> bool` {#liana-cad-api-is-inside}
+
 Return whether a point in millimeters lies inside a body.
-```
 
-### `inside(comp: Component, p: tuple[float, float, float]) -> bool`
+| Parameter | Type | Description |
+|---|---|---|
+| `body` | `BRepBody` | Body to test. |
+| `p` | `tuple[float, float, float]` | Point `(x, y, z)` in mm. |
 
-```text
+**Returns** `bool`  
+**Since** 1.0.0
+
+### `inside(comp: Component, p: tuple[float, float, float]) -> bool` {#liana-cad-api-inside}
+
 Return whether a point in millimeters lies inside any body of a component.
-```
 
-### `first_line(error: BaseException) -> str`
+| Parameter | Type | Description |
+|---|---|---|
+| `comp` | `Component` | Component whose bodies are tested. |
+| `p` | `tuple[float, float, float]` | Point `(x, y, z)` in mm. |
 
-```text
+**Returns** `bool`  
+**Since** 1.0.0
+
+### `first_line(error: BaseException) -> str` {#liana-cad-api-first-line}
+
 Return the first line of an exception message, for logs.
-```
+
+| Parameter | Type | Description |
+|---|---|---|
+| `error` | `BaseException` | Exception to describe. |
+
+**Returns** `str`  
+**Since** 1.0.0
+
+## See also
+
+- [`Liana.cad`](Liana.cad.md): the package this module belongs to.
+- [Architecture](../architecture/overview.md): how the modules work together.
+
+## Changelog
+
+- 1.0.0: first release.

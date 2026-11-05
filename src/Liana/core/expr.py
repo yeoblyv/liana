@@ -17,17 +17,31 @@ Outline = list[tuple[str, str]]
 
 
 def neg(e: str) -> str:
-    """Return the negated expression."""
+    """Return the negated expression.
+
+    Args:
+        e: Expression.
+    """
     return "-(%s)" % e
 
 
 def sgn(sign: int, e: str) -> str:
-    """Return ``e`` for a positive sign and its negation otherwise."""
+    """Return ``e`` for a positive sign and its negation otherwise.
+
+    Args:
+        sign: Positive keeps ``e``, anything else negates it.
+        e: Expression.
+    """
     return e if sign > 0 else neg(e)
 
 
 def diff(a: str, b: str) -> str:
-    """Return the expression ``a - b``."""
+    """Return the expression ``a - b``.
+
+    Args:
+        a: Minuend.
+        b: Subtrahend.
+    """
     return "(%s) - (%s)" % (a, b)
 
 

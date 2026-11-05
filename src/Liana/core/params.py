@@ -29,7 +29,11 @@ ANGLE_PARAMS = frozenset({"CSK_ANGLE"})
 
 
 def fmt(value: float) -> str:
-    """Format a length in mm as a Fusion expression, e.g. ``"4.2 mm"``."""
+    """Format a length in mm as a Fusion expression, e.g. ``"4.2 mm"``.
+
+    Args:
+        value: Length in mm.
+    """
     return "%g mm" % round(float(value), 4)
 
 
