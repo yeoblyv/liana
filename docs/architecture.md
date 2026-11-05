@@ -24,6 +24,8 @@ sketches stay parametric, and the test strategy.
 | `src/Liana/privacy.py` | The privacy policy text shown from the dialog; a test keeps it identical to `PRIVACY.md`. |
 | `src/Liana/core/` | Pure Python, no Fusion imports: settings, layout arithmetic, User Parameters, expression builders, texts. |
 | `src/Liana/cad/` | Modelling with the Fusion API: sketches, features, the four parts, colors and the system. |
+| `src/Liana/resources/` | Toolbar icons, see [Brand and icons](brand.md). |
+| `assets/brand/` | Icon masters and the Marketplace icon. |
 | `tests/` | Tests, including an in-memory stand-in for the Fusion API (`tests/fake_adsk`). |
 | `scripts/` | Quality gates, build, version bump, API docs, golden traces. |
 

@@ -17,6 +17,7 @@ For contributors:
 - [Architecture](architecture.md): how the code is organized and how a build runs.
 - [Testing in Fusion](fusion-test-checklist.md): the manual checks before a release.
 - [Releasing](releasing.md): versions, builds and tags.
+- [Brand and icons](brand.md): the mark, its colors and the icon files.
 - [API reference](api/README.md): generated from the docstrings.
 - [References](references.md): outside sources cited in these pages.
 

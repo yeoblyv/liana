@@ -21,7 +21,7 @@ from _project import ROOT
 SOURCE_DIRS = ("src", "tests", "scripts")
 """Folders with Python sources."""
 
-TEXT_SUFFIXES = {".py", ".manifest", ".md", ".toml", ".yml", ".yaml", ".txt", ".cfg"}
+TEXT_SUFFIXES = {".py", ".manifest", ".md", ".toml", ".yml", ".yaml", ".txt", ".cfg", ".svg"}
 """Files that must be plain ASCII, by suffix."""
 
 TEXT_NAMES = {"LICENSE", "NOTICE", ".gitignore", ".gitattributes", ".editorconfig"}

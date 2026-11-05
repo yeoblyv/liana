@@ -21,3 +21,5 @@ updated: 2026-11-05
   https://www.apache.org/licenses/LICENSE-2.0
 - [R7] Google, "Google Python Style Guide: Comments and Docstrings",
   https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings
+- [R8] Autodesk, "User Interface Customization with Fusion's API",
+  https://help.autodesk.com/cloudhelp/ENU/Fusion-360-API/files/UserInterface_UM.htm
