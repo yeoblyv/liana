@@ -16,38 +16,31 @@ status: stable
 
 Files Liana keeps between sessions: the last dialog settings and the build log.
 
-They live in the per-user application data folder rather than next to the
-code, because an add-in update replaces its own folder and the folder may be
-read-only.
+They live in the add-in's own folder, so uninstalling the add-in removes
+them with it. An update replaces the folder, and the dialog then starts from
+the default settings; systems in designs keep their own settings. When the
+folder is read-only nothing is stored and the dialog starts from the
+defaults.
 
 ## On this page
 
 - [Constants](#constants)
-  - [`APP_FOLDER`](#liana-storage-const-app-folder)
   - [`SETTINGS_FILE`](#liana-storage-const-settings-file)
   - [`LOG_FILE`](#liana-storage-const-log-file)
 - [Classes](#classes)
   - [`Storage`](#liana-storage-class-storage)
     - [`Storage.__init__`](#liana-storage-class-storage-init)
-    - [`Storage.for_user`](#liana-storage-class-storage-for-user)
     - [`Storage.settings_path`](#liana-storage-class-storage-settings-path)
     - [`Storage.log_path`](#liana-storage-class-storage-log-path)
     - [`Storage.load_settings`](#liana-storage-class-storage-load-settings)
     - [`Storage.save_settings`](#liana-storage-class-storage-save-settings)
     - [`Storage.write_log`](#liana-storage-class-storage-write-log)
 - [Functions](#functions)
-  - [`default_data_dir`](#liana-storage-default-data-dir)
   - [`atomic_write_text`](#liana-storage-atomic-write-text)
 - [See also](#see-also)
 - [Changelog](#changelog)
 
 ## Constants
-
-### `APP_FOLDER` {#liana-storage-const-app-folder}
-
-Name of Liana's folder inside the user data folder.
-
-**Since** 1.0.0
 
 ### `SETTINGS_FILE` {#liana-storage-const-settings-file}
 
@@ -70,30 +63,17 @@ Reads and writes Liana's files in one folder.
 | Attribute | Description |
 |---|---|
 | `folder` | Folder with the files. |
-| `legacy_folder` | Folder where pre-release builds kept their settings (the add-in folder); read when the data folder has none yet. |
 
 **Since** 1.0.0
 
-#### `Storage.__init__(self, folder: Path, legacy_folder: Path | None=None) -> None` {#liana-storage-class-storage-init}
+#### `Storage.__init__(self, folder: Path) -> None` {#liana-storage-class-storage-init}
 
 Create the store; nothing is touched on disk until a write.
 
 | Parameter | Type | Description |
 |---|---|---|
 | `folder` | `Path` | Folder with the files. |
-| `legacy_folder` | `Path \| None` | Optional folder to read old settings from. |
 
-**Since** 1.0.0
-
-#### `Storage.for_user(cls, legacy_folder: Path | None=None) -> Storage` {#liana-storage-class-storage-for-user}
-
-Return the store in the current user's data folder.
-
-| Parameter | Type | Description |
-|---|---|---|
-| `legacy_folder` | `Path \| None` | Optional folder to read old settings from. |
-
-**Returns** `Storage`  
 **Since** 1.0.0
 
 #### `Storage.settings_path(self) -> Path` {#liana-storage-class-storage-settings-path}
@@ -143,19 +123,6 @@ Write the build log.
 **Since** 1.0.0
 
 ## Functions
-
-### `default_data_dir(platform: str, env: Mapping[str, str], home: Path) -> Path` {#liana-storage-default-data-dir}
-
-Return the per-user folder for Liana's files on a platform.
-
-| Parameter | Type | Description |
-|---|---|---|
-| `platform` | `str` | Value of `sys.platform`. |
-| `env` | `Mapping[str, str]` | Environment variables. |
-| `home` | `Path` | The user's home folder. |
-
-**Returns** `Path` - `%APPDATA%\Liana` on Windows, `~/Library/Application Support/Liana` on macOS, `$XDG_DATA_HOME/Liana` (default `~/.local/share/Liana`) elsewhere.  
-**Since** 1.0.0
 
 ### `atomic_write_text(path: Path, text: str) -> None` {#liana-storage-atomic-write-text}
 

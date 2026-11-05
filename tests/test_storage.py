@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2026 Yehor Oblyvantsov
-"""Settings and log files in the user data folder."""
+"""Settings and log files in the add-in folder."""
 
 from __future__ import annotations
 
@@ -12,33 +12,7 @@ from pathlib import Path
 import pytest
 
 from Liana.core.settings import DEFAULTS, from_mapping
-from Liana.storage import SETTINGS_FILE, Storage, atomic_write_text, default_data_dir
-
-HOME = Path("/home/user")
-
-
-@pytest.mark.parametrize(
-    "platform, env, expected",
-    [
-        (
-            "win32",
-            {"APPDATA": "C:/Users/Egor/AppData/Roaming"},
-            Path("C:/Users/Egor/AppData/Roaming/Liana"),
-        ),
-        ("win32", {}, HOME / "AppData" / "Roaming" / "Liana"),
-        ("darwin", {}, HOME / "Library" / "Application Support" / "Liana"),
-        ("linux", {"XDG_DATA_HOME": "/data"}, Path("/data/Liana")),
-        ("linux", {}, HOME / ".local" / "share" / "Liana"),
-    ],
-)
-def test_default_data_dir(platform: str, env: dict[str, str], expected: Path) -> None:
-    assert default_data_dir(platform, env, HOME) == expected
-
-
-def test_for_user_uses_the_platform_folder() -> None:
-    store = Storage.for_user()
-    assert store.folder.name == "Liana"
-    assert store.legacy_folder is None
+from Liana.storage import SETTINGS_FILE, Storage, atomic_write_text
 
 
 def test_settings_round_trip_with_non_ascii_folder(tmp_path: Path) -> None:
@@ -60,13 +34,9 @@ def test_missing_or_broken_settings_give_defaults(tmp_path: Path) -> None:
     assert store.load_settings() == DEFAULTS
 
 
-def test_legacy_settings_are_read_and_migrated(tmp_path: Path) -> None:
-    legacy = tmp_path / "addin"
-    legacy.mkdir()
-    (legacy / SETTINGS_FILE).write_text(
-        json.dumps({"cradles": 3, "nut_af": 5.8}), encoding="utf-8"
-    )
-    store = Storage(tmp_path / "data", legacy)
+def test_old_settings_are_migrated(tmp_path: Path) -> None:
+    store = Storage(tmp_path)
+    store.settings_path.write_text(json.dumps({"cradles": 3, "nut_af": 5.8}), encoding="utf-8")
     s = store.load_settings()
     assert s["cradles"] == 3 and s["nut_af"] == DEFAULTS["nut_af"]
     store.save_settings(from_mapping({"cradles": 9}))

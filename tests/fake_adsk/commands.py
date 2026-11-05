@@ -214,6 +214,7 @@ class Command:
     def __init__(self) -> None:
         self.commandInputs = CommandInputs()
         self.okButtonText = "OK"
+        self.helpFile = ""
         self.dialog_size: tuple[int, int] | None = None
         self.inputChanged = Event("inputChanged")
         self.validateInputs = Event("validateInputs")

@@ -41,7 +41,7 @@ on its own page [R1].
 | `src/Liana/addin.py` | `LianaAddIn`: registers the command and the build event, opens the dialog, runs builds. |
 | `src/Liana/dialog.py` | Dialog layout, mapping between inputs and settings, live summary. |
 | `src/Liana/handlers.py` | Fusion event handler classes that forward to callables and report errors. |
-| `src/Liana/storage.py` | Last settings and build log in the user data folder, written atomically. |
+| `src/Liana/storage.py` | Last settings and build log in the add-in folder, written atomically. |
 | `src/Liana/privacy.py` | The privacy policy text shown in the dialog; a test keeps it identical to `PRIVACY.md`. |
 | `src/Liana/resources/` | Toolbar icons [R2]. |
 | `src/Liana/core/` | Pure Python, no Fusion imports: settings, layout arithmetic, User Parameters, expression builders, texts. |
@@ -70,8 +70,8 @@ run() -> LianaAddIn.start() -> Solid > Create > Liana
    is registered.
 2. **Solid > Create > Liana** fires `commandCreated`. The dialog is filled
    from the settings stored in the active design, with the sizes its User
-   Parameters hold now, or else from the last settings in the user data
-   folder.
+   Parameters hold now, or else from the last settings in the add-in
+   folder. The dialog's help button opens `resources/help.html`.
 3. Every input change refreshes the summary; `validateInputs` keeps
    **Generate** off while `core.settings.problems` reports anything.
 4. **Generate** saves the settings and fires `lianaBuild` with them as
@@ -87,7 +87,7 @@ run() -> LianaAddIn.start() -> Solid > Create > Liana
 6. `build_system` creates the User Parameters, one component per part, and
    calls the part builders. A failure in one part is logged and the other
    parts are still built; a failed fillet or chamfer is logged as skipped.
-7. The log is written to the user data folder and a message reports the
+7. The log is written to the add-in folder and a message reports the
    result.
 
 ## Keeping sketches parametric

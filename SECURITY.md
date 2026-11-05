@@ -15,7 +15,7 @@ makes no network connections and loads no code from outside its own folder.
 It reads three kinds of input:
 
 - the values typed into its dialog;
-- its own settings file in the user data folder;
+- its own settings file in its add-in folder;
 - the settings stored in a design, which may come from someone else.
 
 The last two are parsed as JSON and every value is checked against the type

@@ -30,6 +30,7 @@ largest cradle count that fits, the hardware and the screw engagement.
 - [Tie mount](#tie-mount)
 - [Printer bed](#printer-bed)
 - [Privacy policy](#privacy-policy)
+- [Help](#help)
 - [API links](#api-links)
 - [See also](#see-also)
 - [Changelog](#changelog)
@@ -109,6 +110,12 @@ restores every value.
 A collapsed group above the summary holds the full privacy policy. Its
 **Open online version** button opens the policy page in your browser; the
 version of Liana is shown next to it.
+
+## Help
+
+The help button at the bottom left of the dialog opens a help page that
+ships with the add-in, in your default browser. It works offline and links
+to this documentation.
 
 ## API links
 

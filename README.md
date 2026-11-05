@@ -64,8 +64,9 @@ and mount the parts at your own risk.
 ## Privacy
 
 Liana collects no data and makes no network connections. It keeps your
-last dialog settings and the log of the last build in your user data
-folder, and the settings of a system inside the design. Details are in the
+last dialog settings and the log of the last build in its own add-in
+folder, so uninstalling removes them, and the settings of a system inside
+the design. Details are in the
 [privacy policy](PRIVACY.md); the same text is in the **Privacy policy**
 group of the Liana dialog.
 

@@ -37,7 +37,7 @@ To work, Liana stores three things on your own computer and in your own
 designs:
 
 - Last dialog settings. Written when you click Generate, to the file
-  last_settings.json in your user data folder. They hold only the numbers
+  last_settings.json in the Liana add-in folder. They hold only the numbers
   and switches of the dialog and are used to open the dialog with your last
   values.
 - Build log. Written after every build, to the file build_log.txt in the
@@ -51,8 +51,10 @@ designs:
   share it; how Autodesk stores designs is covered by Autodesk's own terms
   and privacy statement.
 
-The user data folder is %APPDATA%\Liana on Windows and
-~/Library/Application Support/Liana on macOS.
+The add-in folder is the folder Liana is installed in. When Liana is
+installed from the Autodesk Marketplace, it is inside the ApplicationPlugins
+folder: %APPDATA%\Autodesk\ApplicationPlugins on Windows and
+~/Library/Application Support/Autodesk/ApplicationPlugins on macOS.
 
 ## 2. Third parties
 
@@ -70,18 +72,21 @@ The publisher holds no data from Liana, so there is nothing to retain or
 delete on the publisher's side.
 
 On your computer, each Generate replaces the previous settings file and
-each build replaces the previous log. Both files stay until you delete
-them; uninstalling Liana does not remove them. The values saved in a design
-stay part of that design until you delete it.
+each build replaces the previous log. Both files stay until you delete them
+or uninstall Liana: uninstalling removes them together with the add-in
+folder. Installing an update removes them too, and the dialog then starts
+from its default settings. The values saved in a design stay part of that
+design until you delete it.
 
 ## 4. Revoking consent and deleting your data
 
 All data stays under your control:
 
 - To stop Liana from storing anything, stop using it and uninstall it.
-- To delete the stored files, delete the folder Liana in your user data
-  folder (see section 1). Liana works normally afterwards and starts from
-  its default settings.
+- To delete the stored files, uninstall Liana, or delete
+  last_settings.json and build_log.txt from the add-in folder (see
+  section 1). Liana works normally afterwards and starts from its default
+  settings.
 - To delete the values saved in a design, delete the design.
 
 If you write to support@oblyvantsov.net, your message and address are used

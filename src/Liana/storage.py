@@ -2,25 +2,22 @@
 # Copyright 2026 Yehor Oblyvantsov
 """Files Liana keeps between sessions: the last dialog settings and the build log.
 
-They live in the per-user application data folder rather than next to the
-code, because an add-in update replaces its own folder and the folder may be
-read-only.
+They live in the add-in's own folder, so uninstalling the add-in removes
+them with it. An update replaces the folder, and the dialog then starts from
+the default settings; systems in designs keep their own settings. When the
+folder is read-only nothing is stored and the dialog starts from the
+defaults.
 """
 
 from __future__ import annotations
 
 import json
 import os
-import sys
 import tempfile
 import time
-from collections.abc import Mapping
 from pathlib import Path
 
 from .core.settings import Settings, defaults, from_mapping, migrate
-
-APP_FOLDER = "Liana"
-"""Name of Liana's folder inside the user data folder."""
 
 SETTINGS_FILE = "last_settings.json"
 """Last values of the dialog."""
@@ -30,29 +27,6 @@ LOG_FILE = "build_log.txt"
 
 _REPLACE_ATTEMPTS = 5
 _REPLACE_DELAY_S = 0.05
-
-
-def default_data_dir(platform: str, env: Mapping[str, str], home: Path) -> Path:
-    """Return the per-user folder for Liana's files on a platform.
-
-    Args:
-        platform: Value of :data:`sys.platform`.
-        env: Environment variables.
-        home: The user's home folder.
-
-    Returns:
-        ``%APPDATA%\\Liana`` on Windows, ``~/Library/Application Support/Liana``
-        on macOS, ``$XDG_DATA_HOME/Liana`` (default ``~/.local/share/Liana``)
-        elsewhere.
-    """
-    if platform.startswith("win"):
-        base = Path(env["APPDATA"]) if env.get("APPDATA") else home / "AppData" / "Roaming"
-    elif platform == "darwin":
-        base = home / "Library" / "Application Support"
-    else:
-        xdg = env.get("XDG_DATA_HOME")
-        base = Path(xdg) if xdg else home / ".local" / "share"
-    return base / APP_FOLDER
 
 
 def atomic_write_text(path: Path, text: str) -> None:
@@ -95,28 +69,15 @@ class Storage:
 
     Attributes:
         folder: Folder with the files.
-        legacy_folder: Folder where pre-release builds kept their settings
-            (the add-in folder); read when the data folder has none yet.
     """
 
-    def __init__(self, folder: Path, legacy_folder: Path | None = None) -> None:
+    def __init__(self, folder: Path) -> None:
         """Create the store; nothing is touched on disk until a write.
 
         Args:
             folder: Folder with the files.
-            legacy_folder: Optional folder to read old settings from.
         """
         self.folder = folder
-        self.legacy_folder = legacy_folder
-
-    @classmethod
-    def for_user(cls, legacy_folder: Path | None = None) -> Storage:
-        """Return the store in the current user's data folder.
-
-        Args:
-            legacy_folder: Optional folder to read old settings from.
-        """
-        return cls(default_data_dir(sys.platform, os.environ, Path.home()), legacy_folder)
 
     @property
     def settings_path(self) -> Path:
@@ -134,17 +95,13 @@ class Storage:
         A missing, unreadable or malformed file yields the defaults: losing
         the last values is better than a dialog that does not open.
         """
-        candidates = [self.settings_path]
-        if self.legacy_folder is not None:
-            candidates.append(self.legacy_folder / SETTINGS_FILE)
-        for path in candidates:
-            try:
-                raw = json.loads(path.read_text(encoding="utf-8"))
-            except (OSError, ValueError):
-                continue
-            if isinstance(raw, dict):
-                return from_mapping(migrate(raw), within_limits=True)
-        return defaults()
+        try:
+            raw = json.loads(self.settings_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            return defaults()
+        if not isinstance(raw, dict):
+            return defaults()
+        return from_mapping(migrate(raw), within_limits=True)
 
     def save_settings(self, s: Settings) -> bool:
         """Store the dialog settings.

@@ -21,6 +21,7 @@ The add-in: registers the Liana command and runs builds.
 - [Constants](#constants)
   - [`ADDIN_DIR`](#liana-addin-const-addin-dir)
   - [`RESOURCES_DIR`](#liana-addin-const-resources-dir)
+  - [`HELP_FILE`](#liana-addin-const-help-file)
   - [`COMMAND_ID`](#liana-addin-const-command-id)
   - [`COMMAND_NAME`](#liana-addin-const-command-name)
   - [`COMMAND_TOOLTIP`](#liana-addin-const-command-tooltip)
@@ -44,7 +45,13 @@ Folder of the installed add-in.
 
 ### `RESOURCES_DIR` {#liana-addin-const-resources-dir}
 
-Command icons.
+Command icons and the help page.
+
+**Since** 1.0.0
+
+### `HELP_FILE` {#liana-addin-const-help-file}
+
+Help page opened by the help button of the dialog (and F1).
 
 **Since** 1.0.0
 

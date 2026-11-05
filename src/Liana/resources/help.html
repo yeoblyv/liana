@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<!-- Copyright 2026 Yehor Oblyvantsov -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Liana help</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1d1d1f;
+    --muted: #5c5c66;
+    --line: #dcdce3;
+    --accent: #5b4fe0;
+    --code: #f2f2f6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16161a;
+      --text: #ececf1;
+      --muted: #a4a4b0;
+      --line: #34343c;
+      --accent: #a79ffb;
+      --code: #24242b;
+    }
+  }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 15px/1.55 "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { font-size: 28px; margin: 0 0 4px; }
+  h2 { font-size: 19px; margin: 32px 0 8px; padding-top: 12px; border-top: 1px solid var(--line); }
+  p.lead { color: var(--muted); margin: 0 0 16px; }
+  a { color: var(--accent); }
+  b { font-weight: 600; }
+  table { border-collapse: collapse; width: 100%; margin: 8px 0; }
+  th, td { text-align: left; vertical-align: top; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+  th { font-weight: 600; }
+  code { background: var(--code); padding: 1px 4px; border-radius: 4px; font-size: 13px; }
+  nav ul { columns: 2; padding-left: 18px; }
+  .note { border-left: 3px solid var(--accent); padding: 4px 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+<h1>Liana help</h1>
+<p class="lead">Parametric under-desk cable holders, an X-frame and a zip-tie mount for Autodesk Fusion.</p>
+
+<nav>
+<ul>
+  <li><a href="#start">Getting started</a></li>
+  <li><a href="#dialog">The dialog</a></li>
+  <li><a href="#change">Changing a design</a></li>
+  <li><a href="#print">Printing and mounting</a></li>
+  <li><a href="#hardware">Hardware</a></li>
+  <li><a href="#files">Files and privacy</a></li>
+  <li><a href="#support">Support</a></li>
+</ul>
+</nav>
+
+<h2 id="start">Getting started</h2>
+<ol>
+  <li>Open an empty design, or tick <b>Build in a new design</b> in the dialog.</li>
+  <li>Choose <b>Solid &gt; Create &gt; Liana</b>.</li>
+  <li>Set the cables, choose the parts and enter your printer bed.</li>
+  <li>Click <b>Generate</b>. Liana builds the parts as components with User Parameters and a full timeline.</li>
+</ol>
+
+<h2 id="dialog">The dialog</h2>
+<table>
+  <tr><th>Group</th><th>What it sets</th></tr>
+  <tr><td>Cables</td><td>Cradles per holder (1 to 15), cable diameter (3 to 25 mm), tooth width, raised teeth that keep each cable in its cradle, and a center T-pin that stiffens combs with 4 or more cradles.</td></tr>
+  <tr><td>Parts</td><td>Holder (rail and comb), X-frame and zip-tie mount; which frame sides show a holder (none, straight run, L-turn, T-branch or X-cross); building in a new design.</td></tr>
+  <tr><td>Holder</td><td>Depth along the cable, wood screw hole and countersink, wood screw length, M3 hole, M3 nut seat and pin clearance.</td></tr>
+  <tr><td>X-frame</td><td>Plate thickness and beam width.</td></tr>
+  <tr><td>Tie mount</td><td>Outer size and the width of the zip-tie tunnels.</td></tr>
+  <tr><td>Printer bed</td><td>Printable area and the margin kept free at its edges.</td></tr>
+</table>
+<p>The summary at the bottom of the dialog shows the size of every part, the largest cradle count that fits your bed and the screw lengths. <b>Generate</b> stays off while a value is empty or not a number, or while a part does not fit. <b>Reset to defaults</b> restores every value.</p>
+
+<h2 id="change">Changing a design</h2>
+<ul>
+  <li><b>Modify &gt; Change Parameters</b> lists every size with a comment. The sketches are dimensioned with these parameters, so the model follows a change. Parameters marked &quot;(derived)&quot; are calculated from the others.</li>
+  <li>Run <b>Solid &gt; Create &gt; Liana</b> again on a design it built: the dialog opens with that design's settings. Changing only sizes updates the parameters in place. Changing the layout (cradle count, parts, T-pin, raised teeth, frame preview) rebuilds the system in the same design, and edits made to the generated parts by hand are lost.</li>
+  <li>Liana finds its system by markers on its components. Renaming the components is fine; after deleting them the next run builds a new system.</li>
+</ul>
+
+<h2 id="print">Printing and mounting</h2>
+<ol>
+  <li>Right-click each component (Rail, Comb, X-Frame, Tie Mount) in the browser and choose <b>Save As Mesh</b>.</li>
+  <li>Print in PLA or PETG with the table side on the bed: the rail, the frame and the tie mount lie on the face that touches the table, the comb on its bottom face. Print one holder first and check the fit.</li>
+  <li>Push an M3 nut into each nut seat of the rail.</li>
+  <li>Screw the rail under the table, through the frame if you use one.</li>
+  <li>Lay the cables into the comb, slide the comb into the rail from the side and tighten the two M3 screws from below.</li>
+</ol>
+<p class="note">Liana gives you the geometry; how well it holds depends on your printer, filament and screws. Check that a test holder and the screws suit your table and the weight of your cables, and do not hang anything heavy on it. Liana is provided as is: you print and mount the parts at your own risk.</p>
+
+<h2 id="hardware">Hardware</h2>
+<table>
+  <tr><th>Part</th><th>Hardware (default sizes)</th></tr>
+  <tr><td>Holder</td><td>2 countersunk wood screws 3.5 mm (4 when the summary says &quot;4 table screws&quot;), 2 M3 countersunk screws DIN 965 and 2 M3 nuts. The summary shows the M3 length.</td></tr>
+  <tr><td>X-frame</td><td>4 countersunk wood screws 3.5 mm at the corners. Holder screws pass through the holder and the frame, so use longer ones there.</td></tr>
+  <tr><td>Tie mount</td><td>1 countersunk wood screw 3.5 mm and a zip tie up to 4.8 mm wide.</td></tr>
+</table>
+
+<h2 id="files">Files and privacy</h2>
+<p>Liana collects no data and makes no network connections. It keeps the last dialog settings (<code>last_settings.json</code>) and the log of the last build (<code>build_log.txt</code>) in its own add-in folder, and the settings of a system inside the design. Uninstalling Liana removes the two files. The full privacy policy is in the <b>Privacy policy</b> group of the dialog and at <a href="https://github.com/yeoblyv/liana/blob/main/PRIVACY.md">github.com/yeoblyv/liana/blob/main/PRIVACY.md</a>.</p>
+
+<h2 id="support">Support</h2>
+<p>Documentation: <a href="https://github.com/yeoblyv/liana/blob/main/docs/README.md">github.com/yeoblyv/liana</a>.<br>
+Questions and bug reports: <a href="https://github.com/yeoblyv/liana/issues">GitHub issues</a> or <a href="mailto:support@oblyvantsov.net">support@oblyvantsov.net</a>.<br>
+Copyright 2026 Yehor Oblyvantsov. Licensed under the Apache License, Version 2.0.</p>
+</main>
+</body>
+</html>

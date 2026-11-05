@@ -67,15 +67,15 @@ shasum -a 256 Liana-1.0.0.zip
 3. Switch **Run** on again. Stopping the add-in drops its modules from
    memory, so the new code loads; restarting Fusion works as well.
 
-The last dialog settings live in the user data folder, not in the add-in
-folder, so they survive the update.
+The last dialog settings live in the add-in folder, so after an update the
+dialog starts from the defaults. Systems in designs keep their own
+settings.
 
 ## Remove
 
 1. In **Scripts and Add-Ins**, select **Liana**, switch **Run** off and
    untick **Run on Startup**.
-2. Delete the `Liana` add-in folder.
-3. Optionally delete the settings folder (see below).
+2. Delete the `Liana` add-in folder. The settings and the log go with it.
 
 Designs built with Liana keep working without the add-in; they are
 ordinary parametric Fusion designs.
@@ -87,9 +87,9 @@ ordinary parametric Fusion designs.
 | `last_settings.json` | The last values of the dialog. |
 | `build_log.txt` | Report of the last build. |
 
-They are in `%APPDATA%\Liana` on Windows and
-`~/Library/Application Support/Liana` on macOS. The
-[privacy policy](../../PRIVACY.md) describes them in full.
+They are in the add-in folder, next to `Liana.py`; when the folder is
+read-only, nothing is stored. The [privacy policy](../../PRIVACY.md)
+describes them in full.
 
 ## See also
 

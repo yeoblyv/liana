@@ -40,6 +40,11 @@ version and the operating system with the results.
    Gray and the Dark Blue theme.
 4. Restart Fusion with **Run on Startup** ticked: the command is there
    again.
+5. Bundle: with Fusion closed, unpack `dist/Liana-<version>.bundle.zip`
+   into the ApplicationPlugins folder (`%APPDATA%\Autodesk\ApplicationPlugins`
+   on Windows, `~/Library/Application Support/Autodesk/ApplicationPlugins`
+   on macOS) and start Fusion: Liana runs without being added by hand.
+   Remove any other copy of Liana from **Scripts and Add-Ins** first.
 
 ## Dialog
 
@@ -50,11 +55,14 @@ version and the operating system with the results.
 3. Untick **X-frame**: **Show holders on the frame** is grayed out.
 4. Set the bed to 100 x 100: the summary marks parts that do not fit and
    **Generate** is off. Restore the bed size.
-5. Type an invalid length such as `abc`: **Generate** is off.
+5. Type an invalid length such as `abc`, then clear the field: in both
+   cases **Generate** is off and nothing fails.
 6. Click **Reset to defaults**: every value returns to its default.
 7. Expand **Privacy policy**: the full policy, sections 1 to 4, scrolls in
    the text box. **Open online version** opens the policy page in the
    default browser.
+8. The help button at the bottom left of the dialog, and F1, open the help
+   page in the default browser.
 
 ## Builds
 
@@ -93,9 +101,8 @@ For the default build also check:
 
 ## Files
 
-1. After a build, the settings folder exists with `last_settings.json` and
-   `build_log.txt`: `%APPDATA%\Liana` on Windows,
-   `~/Library/Application Support/Liana` on macOS.
+1. After a build, the add-in folder holds `last_settings.json` and
+   `build_log.txt`.
 2. Restart Fusion and open the dialog in a new design: it starts from the
    last settings.
 

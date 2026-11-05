@@ -15,7 +15,7 @@ import tests.fake_adsk as fake
 from Liana import addin as addin_module
 from Liana import dialog as dialog_module
 from Liana._version import __version__
-from Liana.addin import BUILD_EVENT_ID, COMMAND_ID, PANEL_ID, LianaAddIn
+from Liana.addin import BUILD_EVENT_ID, COMMAND_ID, HELP_FILE, PANEL_ID, LianaAddIn
 from Liana.core.settings import DEFAULTS, from_mapping
 from Liana.dialog import (
     GROUPS,
@@ -108,6 +108,7 @@ def test_dialog_shows_every_setting_and_the_version(h: Harness) -> None:
     cmd = h.open_dialog()
     inputs = cmd.commandInputs
     assert cmd.okButtonText == "Generate" and cmd.dialog_size == (430, 820)
+    assert cmd.helpFile == str(HELP_FILE)
     for key in KINDS:
         assert inputs.itemById(key) is not None
     assert [g.id for g in GROUPS] == [i.id for i in inputs.order[: len(GROUPS)]]
@@ -201,7 +202,16 @@ def test_policy_text_covers_what_autodesk_asks_for() -> None:
     assert POLICY_URL in text
     html_text = policy_html()
     assert "<b>4. Revoking consent and deleting your data</b>" in html_text
-    assert "%APPDATA%\\Liana" in html_text
+    assert "ApplicationPlugins" in html_text
+
+
+def test_help_page_is_shipped_and_links_online() -> None:
+    page = HELP_FILE.read_text(encoding="utf-8")
+    assert page.isascii() and page.startswith("<!DOCTYPE html>")
+    assert POLICY_URL in page
+    assert "https://github.com/yeoblyv/liana/blob/main/docs/README.md" in page
+    for section in ("start", "dialog", "change", "print", "hardware", "files", "support"):
+        assert 'id="%s"' % section in page and 'href="#%s"' % section in page
 
 
 def test_input_errors_are_not_shown(h: Harness, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -334,9 +344,7 @@ def test_mount_labels_round_trip() -> None:
 def test_entry_point_runs_and_stops(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     fake.reset()
     entry = importlib.import_module("Liana.Liana")
-    monkeypatch.setattr(
-        entry.Storage, "for_user", classmethod(lambda cls, legacy_folder=None: Storage(tmp_path))
-    )
+    monkeypatch.setattr(entry, "Storage", lambda folder: Storage(tmp_path))
     entry.run({"IsApplicationStartup": True})
     entry.run({})  # a second run replaces the first instance
     ui = core.Application.get().userInterface

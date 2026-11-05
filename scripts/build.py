@@ -1,9 +1,14 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2026 Yehor Oblyvantsov
-"""Package the add-in as ``dist/Liana-<version>.zip`` with a SHA-256 checksum.
+"""Package the add-in in two archives, each with a SHA-256 checksum file.
 
-The archive holds one ``Liana`` folder, ready to add with Utilities >
-Add-Ins > Scripts and Add-Ins > +. Only files tracked by git are packed.
+- ``dist/Liana-<version>.zip`` holds one ``Liana`` folder, ready to add with
+  Utilities > Add-Ins > Scripts and Add-Ins > +.
+- ``dist/Liana-<version>.bundle.zip`` holds ``Liana.bundle``, the layout the
+  Autodesk Marketplace installs into the ApplicationPlugins folder:
+  ``PackageContents.xml`` next to a ``Contents`` folder with the add-in.
+
+Only files tracked by git are packed.
 
 Entries are sorted and dated with the commit time: one commit built with
 the same Python gives the same bytes, and every new commit gets new file
@@ -28,15 +33,38 @@ import stat
 import sys
 import time
 import zipfile
+from collections.abc import Mapping
 from pathlib import Path
+from typing import Any
+from xml.sax.saxutils import quoteattr
 
-from _project import ADDIN, ROOT, git, manifest_version, module_version, project_version
+from _project import (
+    ADDIN,
+    MANIFEST,
+    ROOT,
+    git,
+    manifest_version,
+    module_version,
+    project_version,
+)
 
 DIST = ROOT / "dist"
 """Output folder."""
 
 EXTRA_FILES = ("LICENSE", "NOTICE", "PRIVACY.md")
 """Repository files shipped inside the add-in folder."""
+
+BUNDLE = "Liana.bundle"
+"""Folder of the Marketplace bundle."""
+
+PUBLISHER = {
+    "Name": "Yehor Oblyvantsov",
+    "Url": "https://oblyvantsov.net",
+    "Email": "support@oblyvantsov.net",
+}
+"""Publisher details written into ``PackageContents.xml``."""
+
+_OS_NAMES = {"windows": "Win64", "mac": "MacOS"}
 
 _ZIP_EPOCH = 315532800  # 1980-01-01, the earliest time a zip entry can hold
 
@@ -74,14 +102,64 @@ def _entry(name: str, when: time.struct_time) -> zipfile.ZipInfo:
     return info
 
 
-def build() -> Path:
-    """Write the archive and its checksum file.
+def package_contents(manifest: Mapping[str, Any], version: str) -> str:
+    """Return the ``PackageContents.xml`` of the bundle.
 
-    The archive is named after the version in ``pyproject.toml``; the
+    Args:
+        manifest: The add-in manifest.
+        version: Version of the build.
+
+    Returns:
+        The XML text; the component entry names the manifest in ``Contents``.
+    """
+    description = str(manifest.get("description", {}).get("", ""))
+    systems = "|".join(
+        _OS_NAMES[name] for name in str(manifest["supportedOS"]).split("|") if name in _OS_NAMES
+    )
+    attributes = [
+        ("SchemaVersion", "1.0"),
+        ("AutodeskProduct", "Fusion360"),
+        ("ProductType", "Application"),
+        ("Name", "Liana"),
+        ("Description", description),
+        ("AppVersion", version),
+        ("Author", str(manifest["author"])),
+        ("ProductCode", "{%s}" % str(manifest["id"]).upper()),
+        ("HelpFile", "./Contents/resources/help.html"),
+    ]
+    company = " ".join("%s=%s" % (key, quoteattr(value)) for key, value in PUBLISHER.items())
+    lines = ['<?xml version="1.0" encoding="utf-8"?>', "<ApplicationPackage"]
+    lines += ["    %s=%s" % (key, quoteattr(value)) for key, value in attributes]
+    lines[-1] += ">"
+    lines += [
+        "  <CompanyDetails %s />" % company,
+        "  <Components>",
+        '    <RuntimeRequirements OS=%s Platform="Fusion360" />' % quoteattr(systems),
+        '    <ComponentEntry AppName="Liana" Version=%s ModuleName="./Contents/Liana.manifest" />'
+        % quoteattr(version),
+        "  </Components>",
+        "</ApplicationPackage>",
+    ]
+    return "\n".join(lines) + "\n"
+
+
+def _write_zip(path: Path, contents: list[tuple[str, bytes]], when: time.struct_time) -> None:
+    with zipfile.ZipFile(path, "w") as zf:
+        for name, data in sorted(contents):
+            zf.writestr(_entry(name, when), data)
+    digest = hashlib.sha256(path.read_bytes()).hexdigest()
+    checksum = path.with_name(path.name + ".sha256")
+    checksum.write_text("%s  %s\n" % (digest, path.name), encoding="utf-8", newline="\n")
+
+
+def build() -> list[Path]:
+    """Write both archives and their checksum files.
+
+    The archives are named after the version in ``pyproject.toml``; the
     manifest and ``_version.py`` must hold the same version.
 
     Returns:
-        Path of the archive.
+        Paths of the folder archive and of the bundle archive.
 
     Raises:
         SystemExit: The version copies disagree.
@@ -90,31 +168,36 @@ def build() -> Path:
     if (manifest_version(), module_version()) != (version, version):
         raise SystemExit("version copies disagree: run python scripts/bump_version.py --check")
     DIST.mkdir(exist_ok=True)
-    archive = DIST / ("Liana-%s.zip" % version)
-    contents = [
-        ("Liana/" + path.relative_to(ADDIN).as_posix(), path.read_bytes())
-        for path in addin_files()
-    ]
-    for name in EXTRA_FILES:
-        contents.append(("Liana/" + name, (ROOT / name).read_bytes()))
+    files = [(path.relative_to(ADDIN).as_posix(), path.read_bytes()) for path in addin_files()]
+    files += [(name, (ROOT / name).read_bytes()) for name in EXTRA_FILES]
     when = build_time()
-    with zipfile.ZipFile(archive, "w") as zf:
-        for name, data in sorted(contents):
-            zf.writestr(_entry(name, when), data)
-    digest = hashlib.sha256(archive.read_bytes()).hexdigest()
-    checksum = archive.with_name(archive.name + ".sha256")
-    checksum.write_text("%s  %s\n" % (digest, archive.name), encoding="utf-8", newline="\n")
-    return archive
+    archive = DIST / ("Liana-%s.zip" % version)
+    _write_zip(archive, [("Liana/" + name, data) for name, data in files], when)
+    bundle = DIST / ("Liana-%s.bundle.zip" % version)
+    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    xml = package_contents(manifest, version).encode("utf-8")
+    bundled = [(BUNDLE + "/Contents/" + name, data) for name, data in files]
+    _write_zip(bundle, bundled + [(BUNDLE + "/PackageContents.xml", xml)], when)
+    return [archive, bundle]
 
 
-def archive_versions(archive: Path) -> tuple[str, str]:
-    """Return the versions inside an archive: manifest and ``_version.py``."""
+def archive_versions(archive: Path) -> set[str]:
+    """Return every version an archive carries.
+
+    That is the manifest, ``_version.py`` and, in a bundle, the application
+    and component versions of ``PackageContents.xml``.
+    """
+    found = set()
     with zipfile.ZipFile(archive) as zf:
-        manifest = json.loads(zf.read("Liana/Liana.manifest").decode("utf-8"))["version"]
-        module = re.search(
-            r'__version__ = "([^"]+)"', zf.read("Liana/_version.py").decode("utf-8")
-        )
-    return str(manifest), module.group(1) if module else ""
+        for name in zf.namelist():
+            text = zf.read(name).decode("utf-8")
+            if name.endswith("/Liana.manifest"):
+                found.add(str(json.loads(text)["version"]))
+            elif name.endswith("/_version.py") and "/core/" not in name:
+                found.update(re.findall(r'__version__ = "([^"]+)"', text))
+            elif name.endswith("/PackageContents.xml"):
+                found.update(re.findall(r'\s(?:AppVersion|Version)="([^"]+)"', text))
+    return found
 
 
 def main(argv: list[str]) -> int:
@@ -122,15 +205,18 @@ def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--expect-version", help="fail unless the archive carries this version")
     args = parser.parse_args(argv)
-    archive = build()
-    print(archive.relative_to(ROOT).as_posix())
-    print(archive.with_name(archive.name + ".sha256").read_text(encoding="utf-8").strip())
-    if args.expect_version is not None:
-        stamped = archive_versions(archive)
-        if stamped != (args.expect_version, args.expect_version):
-            print("archive carries %s, expected %s" % (stamped, args.expect_version))
-            return 1
-        print("archive carries version %s" % args.expect_version)
+    for archive in build():
+        print(archive.relative_to(ROOT).as_posix())
+        print(archive.with_name(archive.name + ".sha256").read_text(encoding="utf-8").strip())
+        if args.expect_version is not None:
+            stamped = archive_versions(archive)
+            if stamped != {args.expect_version}:
+                print(
+                    "%s carries %s, expected %s"
+                    % (archive.name, sorted(stamped), args.expect_version)
+                )
+                return 1
+            print("%s carries version %s" % (archive.name, args.expect_version))
     return 0
 
 

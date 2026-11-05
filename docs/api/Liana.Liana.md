@@ -45,7 +45,8 @@ Stop the add-in (called by Fusion).
 
 The add-in's other modules are dropped from the import cache, so that
 Run after an update loads the new code instead of the modules Python
-kept in memory.
+kept in memory. A module counts as the add-in's when its file is in the
+add-in folder, whatever package name Fusion gave the folder.
 
 | Parameter | Type | Description |
 |---|---|---|

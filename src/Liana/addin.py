@@ -25,7 +25,10 @@ ADDIN_DIR = Path(__file__).resolve().parent
 """Folder of the installed add-in."""
 
 RESOURCES_DIR = ADDIN_DIR / "resources"
-"""Command icons."""
+"""Command icons and the help page."""
+
+HELP_FILE = RESOURCES_DIR / "help.html"
+"""Help page opened by the help button of the dialog (and F1)."""
 
 COMMAND_ID = "lianaGeneratorCmd"
 """Id of the command definition."""
@@ -147,6 +150,11 @@ class LianaAddIn:
             cmd.setDialogInitialSize(*DIALOG_SIZE)
         except API_ERRORS:
             pass  # older Fusion picks its own size
+        if HELP_FILE.is_file():
+            try:
+                cmd.helpFile = str(HELP_FILE)  # shows the help button of the dialog
+            except API_ERRORS:
+                pass  # the dialog works without it
         design = adsk.fusion.Design.cast(self.app.activeProduct)
         s = None
         if design is not None and find_system(design) is not None:

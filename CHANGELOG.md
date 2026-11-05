@@ -34,8 +34,12 @@ First public release.
 - Privacy policy group in the dialog with the full policy text and a
   button that opens its online version; the version number is shown
   next to it.
-- Settings and build log stored in the user data folder, so they survive
-  add-in updates.
+- Settings and build log stored in the add-in folder, so uninstalling
+  removes them.
+- Help button in the dialog that opens a help page shipped with the
+  add-in.
+- Marketplace bundle `Liana-<version>.bundle.zip` with
+  `PackageContents.xml`, next to the plain `Liana` folder archive.
 
 [Unreleased]: https://github.com/yeoblyv/liana/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/yeoblyv/liana/releases/tag/v1.0.0

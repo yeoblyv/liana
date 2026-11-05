@@ -46,11 +46,17 @@ python scripts/bump_version.py --check
 python scripts/build.py
 ```
 
-writes `dist/Liana-<version>.zip` with one `Liana` folder inside, and
-`dist/Liana-<version>.zip.sha256`. Only files tracked by git are packed.
+writes two archives, each with a `.sha256` checksum file next to it.
+Only files tracked by git are packed.
 
-- The archive, the manifest and the dialog carry the plain semantic
-  version from `pyproject.toml`; the build stops if the copies disagree.
+| Archive | Contents | Used for |
+|---|---|---|
+| `Liana-<version>.zip` | One `Liana` folder. | Adding the add-in by hand in **Scripts and Add-Ins**. |
+| `Liana-<version>.bundle.zip` | `Liana.bundle` with `PackageContents.xml` and the add-in in `Contents`. | The Autodesk Marketplace submission [R3]. |
+
+- The archives, the manifest, `PackageContents.xml` and the dialog carry
+  the plain semantic version from `pyproject.toml`; the build stops if the
+  copies disagree.
 - Entries are dated with the commit time: one commit built with the same
   Python gives the same bytes, and a new commit gives new file times, so
   Python does not reuse bytecode cached for an older build.
@@ -92,8 +98,9 @@ python scripts/bump_version.py 1.2.0-dev
 
 ## Autodesk Marketplace requirements
 
-The publisher agreement asks every app to carry its privacy policy in
-three places. Check them before each submission:
+Upload `Liana-<version>.bundle.zip` as the app file. The publisher
+agreement asks every app to carry its privacy policy in three places.
+Check them before each submission:
 
 1. **Description page.** The listing links to
    https://github.com/yeoblyv/liana/blob/main/PRIVACY.md, and the
@@ -103,6 +110,14 @@ three places. Check them before each submission:
 3. **Text inside the app.** The same group shows the full text, from
    `src/Liana/privacy.py`. When `PRIVACY.md` changes, copy it into
    `POLICY_MARKDOWN`; the tests fail until the two match.
+
+Before a submission also check, on the latest Fusion:
+
+- the help button of the dialog opens the help page
+  (`src/Liana/resources/help.html`);
+- an empty or non-numeric length keeps **Generate** off;
+- after the Marketplace uninstaller, nothing of Liana is left: the
+  settings and the log live in the add-in folder.
 
 The policy keeps four sections: what data is collected and how it is used,
 third parties, retention and deletion, and how users revoke consent or ask
@@ -118,6 +133,7 @@ for deletion. The listing icon is described in
 
 - [R1]: https://semver.org/spec/v2.0.0.html "Semantic Versioning 2.0.0"
 - [R2]: https://keepachangelog.com/en/1.1.0/ "Keep a Changelog 1.1.0"
+- [R3]: https://aps.autodesk.com/marketplace/publisher-center/fusion-publisher-guidelines "Fusion publishing guidelines"
 
 ## Changelog
 
