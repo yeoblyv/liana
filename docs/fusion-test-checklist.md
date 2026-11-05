@@ -35,7 +35,9 @@ the operating system with the results.
    **Generate** is off. Restore the bed size.
 5. Type an invalid length such as `abc`: **Generate** is off.
 6. Click **Reset to defaults**: every value returns to its default.
-7. Click **Privacy policy**: the policy opens in the default browser.
+7. Click **Privacy policy**: a window shows the full policy, with sections
+   1 to 4, and asks whether to open the online version. **No** closes it;
+   **Yes** opens the policy page in the default browser.
 
 ## Builds
 

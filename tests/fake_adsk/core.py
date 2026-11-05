@@ -167,6 +167,28 @@ class DocumentTypes:
     FusionDesignDocumentType = "FusionDesignDocumentType"
 
 
+class MessageBoxButtonTypes:
+    """Message box button sets."""
+
+    OKButtonType = "OKButtonType"
+    YesNoButtonType = "YesNoButtonType"
+
+
+class MessageBoxIconTypes:
+    """Message box icons."""
+
+    NoIconIconType = "NoIconIconType"
+    InformationIconType = "InformationIconType"
+
+
+class DialogResults:
+    """What the user clicked in a message box."""
+
+    DialogOK = "DialogOK"
+    DialogYes = "DialogYes"
+    DialogNo = "DialogNo"
+
+
 class DropDownStyles:
     """Drop-down style enumeration."""
 
@@ -343,11 +365,16 @@ class UserInterface:
         self.commandDefinitions = CommandDefinitions()
         self.allToolbarPanels = ToolbarPanels()
 
-    def messageBox(self, text: str, title: str = "") -> int:
-        """Record a message box."""
-        world().messages.append(text)
-        world().trace_event("messageBox", title, text)
-        return 0
+    def messageBox(
+        self, text: str, title: str = "", buttons: str | None = None, icon: str | None = None
+    ) -> str:
+        """Record a message box; a Yes/No box returns the world's ``answer``."""
+        w = world()
+        w.messages.append(text)
+        w.trace_event("messageBox", title, text)
+        if buttons == MessageBoxButtonTypes.YesNoButtonType:
+            return w.answer
+        return DialogResults.DialogOK
 
     def createProgressDialog(self) -> ProgressDialog:
         """Create a progress dialog."""

@@ -34,6 +34,8 @@ class World:
             extrude-cut fallback.
         new_design_intent: Design intent of documents created by
             ``documents.add``.
+        messages: Text of every message box shown.
+        answer: What the user clicks in a Yes/No message box.
     """
 
     trace: list[TraceEvent] = field(default_factory=list)
@@ -49,6 +51,7 @@ class World:
     containment_queue: list[str] = field(default_factory=list)
     attempts: dict[tuple[Any, ...], int] = field(default_factory=dict)
     messages: list[str] = field(default_factory=list)
+    answer: str = "DialogNo"
     active_product: Any = None
     documents: list[Any] = field(default_factory=list)
     app: Any = None

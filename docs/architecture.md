@@ -21,6 +21,7 @@ sketches stay parametric, and the test strategy.
 | `src/Liana/dialog.py` | Dialog layout, mapping between inputs and settings, live summary. |
 | `src/Liana/handlers.py` | Fusion event handler classes that forward to callables and report errors. |
 | `src/Liana/storage.py` | Last settings and build log in the user data folder, written atomically. |
+| `src/Liana/privacy.py` | The privacy policy text shown from the dialog; a test keeps it identical to `PRIVACY.md`. |
 | `src/Liana/core/` | Pure Python, no Fusion imports: settings, layout arithmetic, User Parameters, expression builders, texts. |
 | `src/Liana/cad/` | Modelling with the Fusion API: sketches, features, the four parts, colors and the system. |
 | `tests/` | Tests, including an in-memory stand-in for the Fusion API (`tests/fake_adsk`). |

@@ -61,6 +61,24 @@ dialog, so a test build is never mistaken for a release.
    the version, builds the archive and publishes a GitHub release with the
    archive, its checksum and the changelog section as notes.
 
+## Autodesk Marketplace requirements
+
+The publisher agreement asks every app to carry its privacy policy in
+three places. Check them before each submission:
+
+1. **Description page.** The listing links to
+   https://github.com/yeoblyv/liana/blob/main/PRIVACY.md, and the repository
+   is public so the link opens.
+2. **Link inside the app.** The **Privacy policy** button in the dialog
+   offers to open the same page.
+3. **Text inside the app.** The same button shows the full text, from
+   `src/Liana/privacy.py`. When `PRIVACY.md` changes, copy it into
+   `POLICY_MARKDOWN`; the tests fail until the two match.
+
+The policy must keep its four sections: what data is collected and how it
+is used, third parties, retention and deletion, and how users revoke
+consent or ask for deletion.
+
 ## References
 
 - [R3] Olivier Lacan and contributors, "Keep a Changelog 1.1.0",

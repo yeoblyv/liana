@@ -56,7 +56,8 @@ and mount the parts at your own risk.
 Liana collects no data and makes no network connections. It keeps your
 last dialog settings and the log of the last build in your user data
 folder, and the settings of a system inside the design. Details are in the
-[privacy policy](PRIVACY.md).
+[privacy policy](PRIVACY.md); the same text opens from the **Privacy
+policy** button in the Liana dialog.
 
 ## Support
 

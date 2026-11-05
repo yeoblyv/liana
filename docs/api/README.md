@@ -25,4 +25,5 @@ Generated from the docstrings by `scripts/gen_api_docs.py`; do not edit by hand.
 - [`Liana.core.settings`](Liana.core.settings.md): Dialog settings: defaults, limits, validation and loading from untrusted JSON.
 - [`Liana.dialog`](Liana.dialog.md): The Liana dialog: inputs, their mapping to settings and the live summary.
 - [`Liana.handlers`](Liana.handlers.md): Fusion event handler classes that forward to plain callables.
+- [`Liana.privacy`](Liana.privacy.md): The privacy policy, shipped inside the add-in and shown from the dialog.
 - [`Liana.storage`](Liana.storage.md): Files Liana keeps between sessions: the last dialog settings and the build log.

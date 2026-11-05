@@ -18,9 +18,6 @@ from .core.settings import DEFAULTS, LIMITS, MOUNTS, Mount, Settings, from_mappi
 FieldKind = Literal["int", "mm", "bool", "mount"]
 """How a setting is shown: spinner, length, check box or the mount list."""
 
-PRIVACY_URL = "https://github.com/yeoblyv/liana/blob/main/PRIVACY.md"
-"""Privacy policy, opened from the dialog."""
-
 RESET_ID = "reset"
 """Input id of the reset button."""
 
@@ -222,15 +219,15 @@ class SettingsDialog:
         editing: Whether the dialog edits a system already in the design.
     """
 
-    def __init__(self, editing: bool, open_url: Callable[[str], object]) -> None:
+    def __init__(self, editing: bool, show_policy: Callable[[], None]) -> None:
         """Prepare a dialog; inputs are created by :meth:`build`.
 
         Args:
             editing: Whether the dialog edits a system already in the design.
-            open_url: Opens a web page in the browser.
+            show_policy: Shows the privacy policy.
         """
         self.editing = editing
-        self._open_url = open_url
+        self._show_policy = show_policy
         self._inputs: dict[str, Any] = {}
         self._summary: Any = None
 
@@ -358,7 +355,7 @@ class SettingsDialog:
         if input_id == RESET_ID:
             self.write(DEFAULTS)
         elif input_id == PRIVACY_ID:
-            self._open_url(PRIVACY_URL)
+            self._show_policy()
         self.refresh()
 
 

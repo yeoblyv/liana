@@ -10,6 +10,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
+import adsk.core
 import adsk.fusion
 
 from .cad.api import API_ERRORS, Application
@@ -19,6 +20,7 @@ from .core.report import log_text, result_message
 from .core.settings import from_mapping
 from .dialog import DIALOG_SIZE, SettingsDialog
 from .handlers import CommandCreated, CommandExecute, CustomEvent, InputChanged, ValidateInputs
+from .privacy import POLICY_TITLE, POLICY_URL, policy_text
 from .storage import Storage
 
 ADDIN_DIR = Path(__file__).resolve().parent
@@ -139,6 +141,17 @@ class LianaAddIn:
         if not self._open_url(url):
             self.ui.messageBox("Open this page in your web browser:\n" + url, COMMAND_NAME)
 
+    def _show_policy(self) -> None:
+        """Show the privacy policy and offer to open its online version."""
+        answer = self.ui.messageBox(
+            policy_text() + "\n\nOpen the online version in your web browser?",
+            POLICY_TITLE,
+            adsk.core.MessageBoxButtonTypes.YesNoButtonType,
+            adsk.core.MessageBoxIconTypes.InformationIconType,
+        )
+        if answer == adsk.core.DialogResults.DialogYes:
+            self._open_page(POLICY_URL)
+
     def _on_created(self, args: Any) -> None:
         """Open the dialog, filled from the design or from the last run."""
         cmd = args.command
@@ -155,7 +168,7 @@ class LianaAddIn:
         if s is None:
             s = self.storage.load_settings()
         s["new_design"] = False
-        dialog = SettingsDialog(editing, self._open_page)
+        dialog = SettingsDialog(editing, self._show_policy)
         dialog.build(cmd.commandInputs, s)
         dialog.refresh(s)
         # input errors are not reported: a message box per keystroke would

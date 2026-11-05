@@ -28,7 +28,8 @@ First public release.
   expressions, full timeline. Running Liana on the same design updates the
   parameters in place, or rebuilds the system when the layout changes.
 - Part colors: rail red, comb green, frame blue, tie mount green.
-- Privacy policy button and version number in the dialog.
+- Privacy policy button in the dialog: shows the full policy and opens
+  its online version; the version number is shown next to it.
 - Settings and build log stored in the user data folder, so they survive
   add-in updates.
 

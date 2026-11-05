@@ -8,10 +8,6 @@ The Liana dialog: inputs, their mapping to settings and the live summary.
 
 How a setting is shown: spinner, length, check box or the mount list.
 
-### `PRIVACY_URL`
-
-Privacy policy, opened from the dialog.
-
 ### `RESET_ID`
 
 Input id of the reset button.
@@ -71,14 +67,14 @@ Attributes:
     editing: Whether the dialog edits a system already in the design.
 ```
 
-#### `SettingsDialog.__init__(self, editing: bool, open_url: Callable[[str], object]) -> None`
+#### `SettingsDialog.__init__(self, editing: bool, show_policy: Callable[[], None]) -> None`
 
 ```text
 Prepare a dialog; inputs are created by :meth:`build`.
 
 Args:
     editing: Whether the dialog edits a system already in the design.
-    open_url: Opens a web page in the browser.
+    show_policy: Shows the privacy policy.
 ```
 
 #### `SettingsDialog.build(self, inputs: Any, s: Settings) -> None`

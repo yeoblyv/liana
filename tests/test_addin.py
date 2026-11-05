@@ -21,12 +21,12 @@ from Liana.dialog import (
     GROUPS,
     KINDS,
     PRIVACY_ID,
-    PRIVACY_URL,
     RESET_ID,
     SUMMARY_ID,
     mount_key,
     mount_label,
 )
+from Liana.privacy import POLICY_MARKDOWN, POLICY_TITLE, POLICY_URL, policy_text
 from Liana.storage import Storage
 from tests.fake_adsk import core, fusion
 
@@ -156,17 +156,47 @@ def test_reset_and_privacy_buttons(h: Harness) -> None:
     cmd.change(RESET_ID)
     assert inputs.itemById("cradles").value == DEFAULTS["cradles"]
     assert inputs.itemById("mount").selectedItem.name == mount_label("X")
-    assert h.opened == []
-    cmd.change(PRIVACY_ID)
-    assert h.opened == [PRIVACY_URL]
     assert h.world.messages == []
+
+
+def test_privacy_button_shows_the_policy_and_can_open_it(h: Harness) -> None:
+    cmd = h.open_dialog()
+    cmd.change(PRIVACY_ID)  # the user answers No
+    assert h.world.messages == [policy_text() + "\n\nOpen the online version in your web browser?"]
+    assert ("messageBox", POLICY_TITLE, h.world.messages[0]) in h.world.trace
+    assert h.opened == []
+    h.world.answer = "DialogYes"
+    cmd.change(PRIVACY_ID)
+    assert h.opened == [POLICY_URL]
+    assert len(h.world.messages) == 2
 
 
 def test_privacy_address_is_shown_when_no_browser_opens(h: Harness) -> None:
     h.browser_works = False
+    h.world.answer = "DialogYes"
     cmd = h.open_dialog()
     cmd.change(PRIVACY_ID)
-    assert h.world.messages == ["Open this page in your web browser:\n" + PRIVACY_URL]
+    assert h.world.messages[-1] == "Open this page in your web browser:\n" + POLICY_URL
+
+
+def test_policy_in_the_add_in_matches_privacy_md() -> None:
+    privacy_md = Path(__file__).resolve().parents[1] / "PRIVACY.md"
+    assert (
+        privacy_md.read_text(encoding="utf-8") == POLICY_MARKDOWN
+    ), "copy PRIVACY.md into POLICY_MARKDOWN in src/Liana/privacy.py"
+
+
+def test_policy_text_covers_what_autodesk_asks_for() -> None:
+    text = policy_text()
+    for heading in (
+        "1. What data Liana collects and how it is used",
+        "2. Third parties",
+        "3. Retention and deletion",
+        "4. Revoking consent and deleting your data",
+    ):
+        assert "\n\n" + heading + "\n\n" in text
+    assert "#" not in text and "  " not in text
+    assert POLICY_URL in text
 
 
 def test_input_errors_are_not_shown(h: Harness, monkeypatch: pytest.MonkeyPatch) -> None:

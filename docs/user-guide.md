@@ -86,8 +86,9 @@ the largest cradle count that fits, the hardware and the screw engagement.
 A rail longer than the bed may still fit diagonally; the summary says so.
 The frame must fit the shorter side of the bed.
 
-**Reset to defaults** restores every value. **Privacy policy** opens the
-policy in your browser; the version of Liana is shown next to it.
+**Reset to defaults** restores every value. **Privacy policy** shows the
+full privacy policy and offers to open its online version in your browser;
+the version of Liana is shown next to it.
 
 ## Editing a system
 
