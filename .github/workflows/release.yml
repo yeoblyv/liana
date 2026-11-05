@@ -1,0 +1,40 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - run: python -m pip install -r requirements-dev.txt
+      - run: python scripts/check.py
+      - name: Tag matches the version
+        shell: bash
+        run: |
+          version="$(python scripts/bump_version.py --check | awk '{print $2}')"
+          test "v${version}" = "${GITHUB_REF_NAME}"
+      - run: python scripts/build.py
+      - name: Publish the release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          awk -v v="$version" '
+            $0 ~ "^## \\[" v "\\]" {on=1; next}
+            on && /^## \[/ {exit}
+            on {print}
+          ' CHANGELOG.md > notes.md
+          gh release create "$GITHUB_REF_NAME" dist/Liana-*.zip dist/Liana-*.zip.sha256 \
+            --title "Liana $version" --notes-file notes.md
