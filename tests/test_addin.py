@@ -182,6 +182,22 @@ def test_reset_keeps_text_typed_over_a_value(h: Harness) -> None:
     assert h.world.messages == []
 
 
+def test_box_stays_invalid_until_the_user_edits_it(h: Harness) -> None:
+    cmd = h.open_dialog()
+    inputs = cmd.commandInputs
+    box = inputs.itemById("cable_d")
+    box.expression = "12 mm"
+    cmd.change("cable_d")
+    box.expression = "abc"
+    cmd.change(RESET_ID)
+    # the default differs from the last valid value, so the box shows it,
+    # but Fusion keeps the box invalid and Generate stays off
+    assert box.expression == "%g mm" % DEFAULTS["cable_d"]
+    assert not cmd.validate()
+    box.expression = "10 mm"
+    assert cmd.validate()
+
+
 def test_open_online_version(h: Harness) -> None:
     cmd = h.open_dialog()
     cmd.change(PRIVACY_ID)

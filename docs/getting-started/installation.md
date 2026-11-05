@@ -67,9 +67,9 @@ shasum -a 256 Liana-1.0.0.zip
 3. Switch **Run** on again. Stopping the add-in drops its modules from
    memory, so the new code loads; restarting Fusion works as well.
 
-The last dialog settings live in the add-in folder, so after an update the
-dialog starts from the defaults. Systems in designs keep their own
-settings.
+The last dialog settings live in the add-in folder: replacing the folder's
+contents keeps them, deleting the folder removes them. Systems in designs
+keep their own settings.
 
 ## Remove
 

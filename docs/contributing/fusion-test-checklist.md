@@ -57,7 +57,8 @@ version and the operating system with the results.
    **Generate** is off. Restore the bed size.
 5. Type an invalid length such as `abc`, then clear the field: in both
    cases **Generate** is off and nothing fails.
-6. Click **Reset to defaults**: every value returns to its default.
+6. Click **Reset to defaults**: every value returns to its default. A box
+   that held letters stays red until you type a number into it.
 7. Expand **Privacy policy**: the full policy, sections 1 to 4, scrolls in
    the text box. **Open online version** opens the policy page in the
    default browser.

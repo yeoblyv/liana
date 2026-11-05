@@ -32,6 +32,7 @@ import re
 import stat
 import sys
 import time
+import uuid
 import zipfile
 from collections.abc import Mapping
 from pathlib import Path
@@ -102,6 +103,19 @@ def _entry(name: str, when: time.struct_time) -> zipfile.ZipInfo:
     return info
 
 
+def product_code(app_id: str, version: str) -> str:
+    """Return the product code of one version: the same for every build of it.
+
+    Installers tell versions apart by the product code and recognise an
+    upgrade by the upgrade code, which is the add-in id and never changes.
+
+    Args:
+        app_id: The add-in id from the manifest.
+        version: Version of the build.
+    """
+    return str(uuid.uuid5(uuid.UUID(app_id), version)).upper()
+
+
 def package_contents(manifest: Mapping[str, Any], version: str) -> str:
     """Return the ``PackageContents.xml`` of the bundle.
 
@@ -124,7 +138,8 @@ def package_contents(manifest: Mapping[str, Any], version: str) -> str:
         ("Description", description),
         ("AppVersion", version),
         ("Author", str(manifest["author"])),
-        ("ProductCode", "{%s}" % str(manifest["id"]).upper()),
+        ("ProductCode", "{%s}" % product_code(str(manifest["id"]), version)),
+        ("UpgradeCode", "{%s}" % str(manifest["id"]).upper()),
         ("HelpFile", "./Contents/resources/help.html"),
     ]
     company = " ".join("%s=%s" % (key, quoteattr(value)) for key, value in PUBLISHER.items())
@@ -190,12 +205,13 @@ def archive_versions(archive: Path) -> set[str]:
     found = set()
     with zipfile.ZipFile(archive) as zf:
         for name in zf.namelist():
-            text = zf.read(name).decode("utf-8")
             if name.endswith("/Liana.manifest"):
-                found.add(str(json.loads(text)["version"]))
+                found.add(str(json.loads(zf.read(name).decode("utf-8"))["version"]))
             elif name.endswith("/_version.py") and "/core/" not in name:
+                text = zf.read(name).decode("utf-8")
                 found.update(re.findall(r'__version__ = "([^"]+)"', text))
             elif name.endswith("/PackageContents.xml"):
+                text = zf.read(name).decode("utf-8")
                 found.update(re.findall(r'\s(?:AppVersion|Version)="([^"]+)"', text))
     return found
 

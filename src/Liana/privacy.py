@@ -19,7 +19,7 @@ POLICY_TITLE = "Privacy policy"
 
 POLICY_MARKDOWN = r"""# Liana privacy policy
 
-Last updated: 5 November 2026.
+Last updated: 6 November 2026.
 
 Liana is an add-in for Autodesk Fusion published by Yehor Oblyvantsov,
 Groningen, the Netherlands. Contact: xineraman8@gmail.com.
@@ -52,8 +52,9 @@ designs:
   and privacy statement.
 
 The add-in folder is the folder Liana is installed in. When Liana is
-installed from the Autodesk Marketplace, it is inside the ApplicationPlugins
-folder: %APPDATA%\Autodesk\ApplicationPlugins on Windows and
+installed from the Autodesk Marketplace, it is a folder whose name ends in
+.bundle inside the ApplicationPlugins folder:
+%APPDATA%\Autodesk\ApplicationPlugins on Windows and
 ~/Library/Application Support/Autodesk/ApplicationPlugins on macOS.
 
 ## 2. Third parties
@@ -74,9 +75,8 @@ delete on the publisher's side.
 On your computer, each Generate replaces the previous settings file and
 each build replaces the previous log. Both files stay until you delete them
 or uninstall Liana: uninstalling removes them together with the add-in
-folder. Installing an update removes them too, and the dialog then starts
-from its default settings. The values saved in a design stay part of that
-design until you delete it.
+folder. The values saved in a design stay part of that design until you
+delete it.
 
 ## 4. Revoking consent and deleting your data
 
@@ -86,7 +86,8 @@ All data stays under your control:
 - To delete the stored files, uninstall Liana, or delete
   last_settings.json and build_log.txt from the add-in folder (see
   section 1). Liana works normally afterwards and starts from its default
-  settings.
+  settings. If you ever find the Liana folder left in the ApplicationPlugins
+  folder after uninstalling, you can delete it.
 - To delete the values saved in a design, delete the design.
 
 If you write to xineraman8@gmail.com, your message and address are used

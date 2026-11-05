@@ -106,8 +106,8 @@ The frame must fit the shorter side of the bed. **Reset to defaults**
 restores every value.
 
 A box with letters or no value turns red and keeps **Generate** off until
-you type a number into it. **Reset to defaults** leaves such a box as it
-is, so you can see which one to fix.
+you type a number into it. Fusion keeps such a box invalid even after
+**Reset to defaults**, so type the number in that box.
 
 ## Privacy policy
 

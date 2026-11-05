@@ -25,7 +25,16 @@ def test_package_contents_describes_the_bundle() -> None:
     assert root.tag == "ApplicationPackage"
     assert root.get("AutodeskProduct") == "Fusion360"
     assert root.get("AppVersion") == "1.2.3"
-    assert root.get("ProductCode") == "{%s}" % manifest["id"].upper()
+    assert root.get("UpgradeCode") == "{%s}" % manifest["id"].upper()
+    product = root.get("ProductCode", "")
+    assert product == "{%s}" % build.product_code(manifest["id"], "1.2.3")
+    assert product != root.get("UpgradeCode")
+    assert build.product_code(manifest["id"], "1.2.3") == build.product_code(
+        manifest["id"], "1.2.3"
+    )
+    assert build.product_code(manifest["id"], "1.2.3") != build.product_code(
+        manifest["id"], "1.2.4"
+    )
     help_file = root.get("HelpFile", "")
     assert help_file == "./Contents/" + HELP_FILE.relative_to(ADDIN).as_posix()
     company = root.find("CompanyDetails")
@@ -40,7 +49,7 @@ def test_package_contents_describes_the_bundle() -> None:
 
 def test_package_contents_escapes_text() -> None:
     manifest = {
-        "id": "x",
+        "id": "69b49b49-20bf-41ea-9d45-b50663e771ea",
         "author": 'A & "B"',
         "description": {"": "<tags>"},
         "supportedOS": "windows",

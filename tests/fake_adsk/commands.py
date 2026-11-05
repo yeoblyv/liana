@@ -71,9 +71,10 @@ class IntegerSpinnerCommandInput(CommandInput):
 class ValueCommandInput(CommandInput):
     """Length input in mm; ``value`` is in internal units (cm).
 
-    Like Fusion, the box shows an expression: setting ``value`` writes it,
-    and setting ``expression`` (what the user types) is evaluated, leaving
-    ``value`` at the last valid number when the text is not one.
+    Like Fusion, the box shows an expression: setting ``value`` writes it
+    when the value changes, and setting ``expression`` (what the user types)
+    is evaluated, leaving ``value`` at the last valid number when the text is
+    not one. Only the user's edit makes an invalid box valid again.
     """
 
     def __init__(self, input_id: str, name: str, units: str, value: Any) -> None:
@@ -91,9 +92,10 @@ class ValueCommandInput(CommandInput):
 
     @value.setter
     def value(self, value: float) -> None:
+        # Fusion redraws the box only when the value changes, and a box the
+        # user made invalid stays invalid until the user edits it
         if float(value) != self._value or not self._expression:
             self._expression = "%g mm" % (float(value) * 10)
-            self.isValidExpression = True
         self._value = float(value)
 
     @property
