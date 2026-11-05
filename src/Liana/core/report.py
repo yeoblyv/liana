@@ -19,7 +19,7 @@ class BuildLog:
 
     Attributes:
         hard: Parts that could not be finished, with a short traceback.
-        soft: Finishing features (fillets, chamfers, colours) that were skipped.
+        soft: Finishing features (fillets, chamfers, colors) that were skipped.
         dims: Sketch dimensions Fusion refused.
         aligned: Coordinates tied to an earlier point with the same expression.
     """

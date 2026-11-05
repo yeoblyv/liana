@@ -42,7 +42,7 @@ Everything that changes the feature tree, as opposed to sizes.
 ### `Layout`
 
 ```text
-Sizes derived from the settings, in millimetres.
+Sizes derived from the settings, in millimeters.
 
 Attributes:
     n: Cradles per holder.
@@ -54,9 +54,9 @@ Attributes:
     stem_hw: Half-width of the T-pin stem.
     boss_hw: Half-width of the rail boss around the T-slot.
     side_x: Side screws, measured from the pin.
-    block_hx: Half-width of the rail centre block.
-    pin: Whether the comb has a centre T-pin.
-    pin_x: X of the pin (half a pitch off centre for odd counts).
+    block_hx: Half-width of the rail center block.
+    pin: Whether the comb has a center T-pin.
+    pin_x: X of the pin (half a pitch off center for odd counts).
     side: Whether the side screws next to the pin fit.
     cav_r: Round of the rail cavity upper corners.
     a: Half-distance between opposite holders on the frame.
@@ -72,7 +72,7 @@ Attributes:
     nut_side: Whether the nut enters from the side (low end blocks).
     bite_frame: Wood screw engagement, holder on the frame.
     m3_len: Stock M3 length that fits, or None.
-    teeth: Raised teeth positions in pitches from the centre.
+    teeth: Raised teeth positions in pitches from the center.
     gusset: Leg of the frame inner corner gussets.
 ```
 

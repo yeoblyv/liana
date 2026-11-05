@@ -3,7 +3,7 @@
 """Rail: the upper half of the holder, screwed to the table.
 
 The rail is a plate with ears for the wood screws, end blocks that meet the
-comb at the cable axis, an optional boss with a T-slot for the comb's centre
+comb at the cable axis, an optional boss with a T-slot for the comb's center
 pin, M3 channels and nut seats that pull the comb up.
 """
 
@@ -138,7 +138,7 @@ def build_rail(ctx: BuildContext, comp: Component, s: Settings) -> None:
     ext_one(ctx, comp, sk, CUT, "CABLE_Y - M3_CH_GAP", 1, (ev("M3_X"), -ev("CABLE_Y") + 0.5, 0))
 
     # nut seats: an entry slot with a flared mouth that ends in a half hexagon
-    # centred on the screw, so the nut slides in by hand and stops on the axis
+    # centered on the screw, so the nut slides in by hand and stops on the axis
     sk = ParamSketch(
         ctx, comp, plane_y(ctx, comp, neg("CABLE_Y - NUT_Y0")), "Rail nut seats", 0, 2
     )

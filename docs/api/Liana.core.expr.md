@@ -34,7 +34,7 @@ Return the expression ``a - b``.
 ### `pitch_expr(t: float) -> str`
 
 ```text
-Return ``t`` cradle pitches from the centre as an expression.
+Return ``t`` cradle pitches from the center as an expression.
 
 Args:
     t: Offset in pitches; may be fractional.
@@ -49,7 +49,7 @@ Returns:
 Return the outline of one M3 nut seat at ``x = sx * M3_X``.
 
 The seat is an entry slot with a flared mouth that ends in a half hexagon
-centred on the screw, so the nut slides in by hand, stops on the screw
+centered on the screw, so the nut slides in by hand, stops on the screw
 axis and cannot turn.
 
 Args:
@@ -73,7 +73,7 @@ Args:
 
 Returns:
     Opposite corners with ``u`` along X and ``v`` along Z, relative to
-    the frame centre.
+    the frame center.
 ```
 
 ### `holder_hole_exprs(side_screws: bool, ev: Callable[[str], float]) -> list[str]`
@@ -87,7 +87,7 @@ coincide with an existing hole are dropped.
 
 Args:
     side_screws: Whether the holder has side screws next to the pin.
-    ev: Evaluates an expression to millimetres.
+    ev: Evaluates an expression to millimeters.
 
 Returns:
     X expressions of the holes.

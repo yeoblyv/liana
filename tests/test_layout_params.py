@@ -49,7 +49,7 @@ def test_small_cables_enter_the_nut_from_the_side() -> None:
     assert not layout(settings(cable_d=25.0)).nut_side
 
 
-def test_odd_counts_put_the_pin_next_to_the_centre() -> None:
+def test_odd_counts_put_the_pin_next_to_the_center() -> None:
     lay = layout(settings(cradles=5))
     assert lay.pin and lay.pin_x == pytest.approx(lay.p / 2)
     assert all(abs(t * lay.p - lay.pin_x) > 1e-6 for t in lay.teeth)

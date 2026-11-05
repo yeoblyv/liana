@@ -139,7 +139,7 @@ class Storage:
             except (OSError, ValueError):
                 continue
             if isinstance(raw, dict):
-                return from_mapping(migrate(raw))
+                return from_mapping(migrate(raw), within_limits=True)
         return defaults()
 
     def save_settings(self, s: Settings) -> bool:

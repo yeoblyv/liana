@@ -29,12 +29,16 @@ Forwards ``commandCreated``.
 
 ```text
 Wrap a callback.
+
+Args:
+    callback: Receives the event arguments.
+    on_error: Called when ``callback`` raises.
 ```
 
 #### `CommandCreated.notify(self, args: Any) -> None`
 
 ```text
-Called by Fusion.
+Pass the event arguments to the callback.
 ```
 
 ### `InputChanged(adsk.core.InputChangedEventHandler)`
@@ -47,12 +51,16 @@ Forwards ``inputChanged``.
 
 ```text
 Wrap a callback.
+
+Args:
+    callback: Receives the event arguments.
+    on_error: Called when ``callback`` raises.
 ```
 
 #### `InputChanged.notify(self, args: Any) -> None`
 
 ```text
-Called by Fusion.
+Pass the event arguments to the callback.
 ```
 
 ### `ValidateInputs(adsk.core.ValidateInputsEventHandler)`
@@ -64,13 +72,16 @@ Forwards ``validateInputs``; an error disables the OK button.
 #### `ValidateInputs.__init__(self, callback: Callable[[], bool]) -> None`
 
 ```text
-Wrap a callback that returns whether the inputs are valid.
+Wrap a callback.
+
+Args:
+    callback: Returns whether the inputs are valid.
 ```
 
 #### `ValidateInputs.notify(self, args: Any) -> None`
 
 ```text
-Called by Fusion.
+Set ``args.areInputsValid`` from the callback.
 ```
 
 ### `CommandExecute(adsk.core.CommandEventHandler)`
@@ -83,12 +94,16 @@ Forwards ``execute``.
 
 ```text
 Wrap a callback.
+
+Args:
+    callback: Receives the event arguments.
+    on_error: Called when ``callback`` raises.
 ```
 
 #### `CommandExecute.notify(self, args: Any) -> None`
 
 ```text
-Called by Fusion.
+Pass the event arguments to the callback.
 ```
 
 ### `CustomEvent(adsk.core.CustomEventHandler)`
@@ -101,10 +116,14 @@ Forwards a custom event.
 
 ```text
 Wrap a callback.
+
+Args:
+    callback: Receives the event arguments.
+    on_error: Called when ``callback`` raises.
 ```
 
 #### `CustomEvent.notify(self, args: Any) -> None`
 
 ```text
-Called by Fusion.
+Pass the event arguments to the callback.
 ```

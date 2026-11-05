@@ -29,10 +29,10 @@ from .context import BuildContext
 from .sketch import ParamSketch, plane_y
 
 Vec3 = tuple[float, float, float]
-"""Model point in millimetres."""
+"""Model point in millimeters."""
 
 Pt2 = tuple[float, float]
-"""Pair of model coordinates in millimetres."""
+"""Pair of model coordinates in millimeters."""
 
 _POSITIVE = adsk.fusion.ExtentDirections.PositiveExtentDirection
 _NEGATIVE = adsk.fusion.ExtentDirections.NegativeExtentDirection
@@ -210,7 +210,7 @@ def end_face_edges(
     Args:
         bs: Bodies to search.
         dz: Distance of the end faces from Z = 0, in mm.
-        x: Centre of the window along X, in mm.
+        x: Center of the window along X, in mm.
         half_width: Half-width of the window along X, in mm.
         y0: Bottom of the window, in mm.
         y1: Top of the window, in mm.
@@ -232,7 +232,7 @@ def sym(x: float, y: float) -> list[Pt2]:
 
 
 def corners(x: float, z: float) -> list[Pt2]:
-    """Return the four corners of a rectangle centred on the origin."""
+    """Return the four corners of a rectangle centered on the origin."""
     return [(x, z), (-x, z), (x, -z), (-x, -z)]
 
 
@@ -300,7 +300,7 @@ def csk_holes(
         ctx: Build context.
         comp: Component to drill.
         y_expr: Y of the surface the holes start from.
-        pts: Hole centres as ``(x, z)`` expressions.
+        pts: Hole centers as ``(x, z)`` expressions.
         dia: Bore diameter.
         csk: Countersink diameter at the surface.
         angle: Countersink angle.
@@ -350,7 +350,7 @@ def csk_holes(
         sink.circle(u, v, csk)
     height = "((%s) - (%s)) / 2" % (csk, dia)
     radius, t = ctx.ev(csk) / 2, ctx.ev(height) * 0.8
-    sx = -1 if u0 > 0 else 1  # probe toward the part centre
+    sx = -1 if u0 > 0 else 1  # probe toward the part center
     rim = (u0 + sx * (radius - 0.3), y0 + want_y * 0.1, v0)
     wrong = (u0 + sx * (radius + 0.5 * t), y0 + want_y * t, v0)
     last: Exception | None = None

@@ -81,7 +81,7 @@ The legs end at ``(ue, vc)`` and ``(uc, ve)``.
 #### `ParamSketch.circle(self, uc: str, vc: str, dia: str) -> SketchCircle`
 
 ```text
-Draw a circle with a driven centre and diameter.
+Draw a circle with a driven center and diameter.
 ```
 
 #### `ParamSketch.polygon(self, pts: Outline) -> list[SketchLine]`

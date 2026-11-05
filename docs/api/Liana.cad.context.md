@@ -35,7 +35,7 @@ driven by its negation.
 ```text
 Run an optional finishing step; a failure is logged, not raised.
 
-Fillets, chamfers and colours only refine a part, so the part stays
+Fillets, chamfers and colors only refine a part, so the part stays
 usable without them. Fusion can fail them in ways the API does not
 document (edge topology, tangency), hence the broad catch.
 

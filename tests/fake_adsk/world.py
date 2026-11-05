@@ -22,7 +22,7 @@ class World:
         trace: Ordered record of every call that changes the design or the UI.
         errors: Inconsistencies the fake detected, for example a dimension
             whose expression disagrees with the drawn geometry.
-        values: Evaluated user parameters, in millimetres (degrees for angles).
+        values: Evaluated user parameters, in millimeters (degrees for angles).
         expressions: User parameter expressions by name.
         order: User parameter names in creation order (dependency order).
         fail_first_direction: When true, the first one-sided extrude or hole
@@ -64,7 +64,7 @@ class World:
             expr: Expression such as ``"END_X0 + 2 mm"``.
 
         Returns:
-            The value in millimetres (degrees for angle expressions).
+            The value in millimeters (degrees for angle expressions).
         """
         names: dict[str, Any] = dict(self.values)
         names["sqrt"] = math.sqrt
@@ -93,5 +93,5 @@ def reset() -> World:
 
 
 def mm(value_cm: float) -> float:
-    """Convert Fusion internal centimetres to millimetres, rounded for traces."""
+    """Convert Fusion internal centimetres to millimeters, rounded for traces."""
     return round(value_cm * 10.0, 6) + 0.0

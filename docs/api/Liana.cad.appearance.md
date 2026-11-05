@@ -1,6 +1,6 @@
 # `Liana.cad.appearance`
 
-Part colours, so the rail, comb, frame and tie mount stay apart visually.
+Part colors, so the rail, comb, frame and tie mount stay apart visually.
 
 ## Constants
 
@@ -14,7 +14,7 @@ Library appearances to copy, in order of preference.
 
 ### `PART_COLORS`
 
-Component name to appearance name and RGB colour.
+Component name to appearance name and RGB color.
 
 ## Functions
 
@@ -24,23 +24,23 @@ Component name to appearance name and RGB colour.
 Return the named appearance of the design, creating it on first use.
 
 A plastic appearance from the Fusion library is copied into the design and
-its colour property is set.
+its color property is set.
 
 Args:
     app: Fusion application.
     design: Design that owns the appearance.
     name: Appearance name.
-    rgb: Colour.
+    rgb: Color.
 
 Returns:
     The appearance.
 
 Raises:
-    RuntimeError: The copied appearance has no colour property.
+    RuntimeError: The copied appearance has no color property.
 ```
 
 ### `paint_parts(app: Application, design: Design) -> None`
 
 ```text
-Colour every Liana part of the design: rail red, comb green, frame blue.
+Color every Liana part of the design: rail red, comb green, frame blue.
 ```

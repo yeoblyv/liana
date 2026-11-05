@@ -7,7 +7,7 @@ Generated from the docstrings by `scripts/gen_api_docs.py`; do not edit by hand.
 - [`Liana.addin`](Liana.addin.md): The add-in: registers the Liana command and runs builds.
 - [`Liana.cad`](Liana.cad.md): Modelling with the Fusion API: sketches, features, parts and the system.
 - [`Liana.cad.api`](Liana.cad.api.md): Thin helpers over the Fusion API used by every builder.
-- [`Liana.cad.appearance`](Liana.cad.appearance.md): Part colours, so the rail, comb, frame and tie mount stay apart visually.
+- [`Liana.cad.appearance`](Liana.cad.appearance.md): Part colors, so the rail, comb, frame and tie mount stay apart visually.
 - [`Liana.cad.comb`](Liana.cad.comb.md): Comb: the lower half of the holder with the cable cradles.
 - [`Liana.cad.context`](Liana.cad.context.md): State shared by the builders during one build.
 - [`Liana.cad.design`](Liana.cad.design.md): Design-level helpers: documents, components, attributes and parameters.

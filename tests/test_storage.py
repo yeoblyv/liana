@@ -119,3 +119,9 @@ def test_permanent_lock_raises_and_leaves_no_temp_file(
     with pytest.raises(PermissionError):
         atomic_write_text(tmp_path / "a.txt", "x")
     assert list(tmp_path.iterdir()) == []
+
+
+def test_out_of_range_settings_are_not_trusted(tmp_path: Path) -> None:
+    store = Storage(tmp_path)
+    store.settings_path.write_text('{"cradles": 1000000000, "nut_af": 1e999}', encoding="utf-8")
+    assert store.load_settings() == DEFAULTS

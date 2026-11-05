@@ -58,14 +58,21 @@ Point = Any
 """``adsk.core.Point3D``."""
 
 MM = 0.1
-"""One millimetre in Fusion internal units (centimetres)."""
+"""One millimeter in Fusion internal units (centimetres)."""
 
-API_ERRORS: tuple[type[Exception], ...] = (RuntimeError, AttributeError, NotImplementedError)
+API_ERRORS: tuple[type[Exception], ...] = (
+    RuntimeError,
+    AttributeError,
+    NotImplementedError,
+    TypeError,
+    ValueError,
+)
 """Exceptions that mean "Fusion refused this call".
 
-Fusion raises RuntimeError for a refused operation, AttributeError when a
-method or property is missing in an older release, and its bindings raise
-NotImplementedError when no overload matches the arguments.
+Fusion raises RuntimeError for a refused operation and AttributeError when a
+method or property is missing in an older release. Its bindings raise
+NotImplementedError when no overload matches the arguments, and TypeError or
+ValueError when an argument cannot be converted.
 """
 
 NEW_BODY = adsk.fusion.FeatureOperations.NewBodyFeatureOperation
@@ -84,7 +91,7 @@ def value(expr: str) -> Any:
 
 
 def point(x: float, y: float, z: float) -> Point:
-    """Return a ``Point3D`` from millimetre coordinates."""
+    """Return a ``Point3D`` from millimeter coordinates."""
     return adsk.core.Point3D.create(x * MM, y * MM, z * MM)
 
 
@@ -102,7 +109,7 @@ def bodies(comp: Component) -> list[BRepBody]:
 
 
 def is_inside(body: BRepBody, p: tuple[float, float, float]) -> bool:
-    """Return whether a point in millimetres lies inside a body."""
+    """Return whether a point in millimeters lies inside a body."""
     return bool(
         body.pointContainment(point(*p))
         == adsk.fusion.PointContainment.PointInsidePointContainment
@@ -110,7 +117,7 @@ def is_inside(body: BRepBody, p: tuple[float, float, float]) -> bool:
 
 
 def inside(comp: Component, p: tuple[float, float, float]) -> bool:
-    """Return whether a point in millimetres lies inside any body of a component."""
+    """Return whether a point in millimeters lies inside any body of a component."""
     return any(is_inside(b, p) for b in bodies(comp))
 
 

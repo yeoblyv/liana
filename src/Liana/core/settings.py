@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import math
 from typing import Any, Literal, TypedDict, cast, get_args
 
 Mount = Literal["none", "straight", "L", "T", "X"]
@@ -14,7 +15,7 @@ Side = Literal["S", "E", "N", "W"]
 
 
 class Settings(TypedDict):
-    """Everything the dialog sets; lengths in millimetres."""
+    """Everything the dialog sets; lengths in millimeters."""
 
     cradles: int
     cable_d: float
@@ -131,6 +132,21 @@ def defaults() -> Settings:
     return DEFAULTS.copy()
 
 
+def finite_number(value: object) -> float | None:
+    """Return ``value`` as a finite float, or None.
+
+    Booleans, strings, NaN, infinities and integers too large for a float
+    are rejected, so untrusted JSON cannot smuggle them into the arithmetic.
+    """
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return None
+    try:
+        number = float(value)
+    except OverflowError:
+        return None
+    return number if math.isfinite(number) else None
+
+
 def migrate(raw: dict[str, Any]) -> dict[str, Any]:
     """Upgrade settings saved by an older version, in place.
 
@@ -143,26 +159,30 @@ def migrate(raw: dict[str, Any]) -> dict[str, Any]:
     Returns:
         The same dictionary, tagged with :data:`SETTINGS_VERSION`.
     """
-    old_version = raw.get("ver", 1)
-    if isinstance(old_version, (int, float)) and old_version < 2:
-        nut_af = raw.get("nut_af")
-        if isinstance(nut_af, (int, float)) and abs(float(nut_af) - _OLD_DEFAULT_NUT_AF) < 1e-6:
+    old_version = finite_number(raw.get("ver", 1))
+    if old_version is not None and old_version < 2:
+        nut_af = finite_number(raw.get("nut_af"))
+        if nut_af is not None and abs(nut_af - _OLD_DEFAULT_NUT_AF) < 1e-6:
             raw["nut_af"] = DEFAULTS["nut_af"]
     raw["ver"] = SETTINGS_VERSION
     return raw
 
 
-def from_mapping(raw: object) -> Settings:
-    """Build settings from untrusted data, keeping only well-typed known keys.
+def from_mapping(raw: object, within_limits: bool = False) -> Settings:
+    """Build settings from data of unknown quality, keeping well-typed known keys.
 
-    Values come from JSON files, design attributes or event payloads, so
-    unknown keys are dropped and every value is checked against the type of
-    its default. Range limits are enforced separately by
-    :func:`problems`, which keeps an out-of-range value visible in the
-    dialog instead of silently replacing it.
+    Unknown keys are dropped and every value is checked against the type of
+    its default; numbers must be finite.
+
+    Values read back from files, designs or events pass ``within_limits``,
+    so an out-of-range value (a cradle count of a billion, say) is replaced
+    by the default before any arithmetic runs on it. The dialog leaves it
+    off: there an out-of-range value must stay visible and be reported by
+    :func:`problems`.
 
     Args:
         raw: Parsed JSON; anything that is not an object yields the defaults.
+        within_limits: Also drop numbers outside :data:`LIMITS`.
 
     Returns:
         Complete settings.
@@ -180,14 +200,23 @@ def from_mapping(raw: object) -> Settings:
                 merged[key] = value
         elif isinstance(default, int):
             if isinstance(value, int) and not isinstance(value, bool):
-                merged[key] = value
+                if not within_limits or _in_limits(key, value):
+                    merged[key] = value
         elif isinstance(default, float):
-            if isinstance(value, (int, float)) and not isinstance(value, bool):
-                merged[key] = float(value)
+            number = finite_number(value)
+            if number is not None and (not within_limits or _in_limits(key, number)):
+                merged[key] = number
         elif key == "mount":
             if value in get_args(Mount):
                 merged[key] = value
     return cast(Settings, merged)
+
+
+def _in_limits(key: str, value: float) -> bool:
+    if key not in LIMITS:
+        return True
+    lo, hi = LIMITS[key]
+    return lo - 1e-9 <= value <= hi + 1e-9
 
 
 def problems(s: Settings, fits_bed: bool) -> list[str]:
@@ -206,7 +235,7 @@ def problems(s: Settings, fits_bed: bool) -> list[str]:
         value = values[key]
         if not isinstance(value, (int, float)):
             continue
-        if value < lo - 1e-9 or value > hi + 1e-9:
+        if not lo - 1e-9 <= value <= hi + 1e-9:  # also true for NaN
             found.append("%s must be %g...%g" % (key.replace("_", " "), lo, hi))
     if s["screw_csk"] <= s["screw_d"] + 0.5:
         found.append("countersink must be larger than the screw hole")

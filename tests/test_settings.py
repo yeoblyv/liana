@@ -106,3 +106,26 @@ def test_limits_cover_every_numeric_setting() -> None:
         k for k, v in DEFAULTS.items() if isinstance(v, (int, float)) and not isinstance(v, bool)
     } - {"ver"}
     assert numeric == set(LIMITS)
+
+
+@pytest.mark.parametrize("bad", [10**400, float("nan"), float("inf"), -float("inf")])
+def test_numbers_must_be_finite(bad: object) -> None:
+    assert from_mapping({"nut_af": bad, "cable_d": bad}) == DEFAULTS
+    assert migrate({"nut_af": bad, "ver": 1})["nut_af"] is bad
+    assert migrate({"nut_af": 5.8, "ver": bad})["nut_af"] == 5.8
+
+
+def test_values_read_back_must_be_within_limits() -> None:
+    raw = {"cradles": 10**9, "cable_d": 40.0, "depth": 14.0}
+    assert from_mapping(raw)["cradles"] == 10**9  # the dialog reports it
+    checked = from_mapping(raw, within_limits=True)
+    assert checked["cradles"] == DEFAULTS["cradles"]
+    assert checked["cable_d"] == DEFAULTS["cable_d"]
+    assert checked["depth"] == 14.0
+    assert from_mapping({"ver": 7}, within_limits=True)["ver"] == 7
+
+
+def test_problems_catch_nan() -> None:
+    s = defaults()
+    s["depth"] = float("nan")
+    assert problems(s, fits_bed=True) == ["depth must be 8...40"]

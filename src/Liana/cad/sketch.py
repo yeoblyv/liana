@@ -157,7 +157,8 @@ class ParamSketch:
         except API_ERRORS:
             pass  # older Fusion: no point-to-point constraints
         try:
-            # a construction line between the points, kept vertical or horizontal
+            # older Fusion: a construction line kept vertical or horizontal ties
+            # the points instead; coincident points cannot carry a line
             g0, g1 = ref.geometry, pt.geometry
             if abs(g0.x - g1.x) + abs(g0.y - g1.y) < 1e-6:
                 return False
@@ -201,7 +202,8 @@ class ParamSketch:
             self.ctx.log.aligned.append("%s | axis %d = %s" % (self.name, axis, expr))
             return
         errs = []
-        # 1) distance from the origin along the axis
+        # the origin dimension reads naturally in the sketch; the offset from
+        # the projected axis is the fallback when Fusion refuses it
         try:
             d = self._dims.addDistanceDimension(
                 self._origin, pt, self._orientation(axis), self._text_beside(pt, axis)
@@ -211,7 +213,6 @@ class ParamSketch:
             return
         except API_ERRORS as e:
             errs.append("origin: %s" % first_line(e))
-        # 2) offset from the projected axis that runs along the other direction
         try:
             d = self._dims.addOffsetDimension(
                 self._axis_line(other), pt, self._text_beside(pt, axis)
@@ -285,7 +286,7 @@ class ParamSketch:
         self.dim_between(corner, l2.endSketchPoint, self.iv, diff(ve, vc))
 
     def circle(self, uc: str, vc: str, dia: str) -> SketchCircle:
-        """Draw a circle with a driven centre and diameter."""
+        """Draw a circle with a driven center and diameter."""
         c = self.sk.sketchCurves.sketchCircles.addByCenterRadius(
             self._sketch_point(uc, vc), self.ctx.ev(dia) / 2 * MM
         )

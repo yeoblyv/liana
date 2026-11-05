@@ -218,7 +218,7 @@ def build_system(ctx: BuildContext, s: Settings, progress: Progress) -> Occurren
         progress.step("Holders on the frame")
         if holder is not None:
             seat_holders(ctx, system, holder, s)
-        ctx.soft("Part colours", lambda: paint_parts(ctx.app, design))
+        ctx.soft("Part colors", lambda: paint_parts(ctx.app, design))
         save_design_settings(design, s)
         try:
             design.computeAll()
@@ -255,7 +255,7 @@ def generate(app: Application, s: Settings, progress: Progress) -> tuple[str, Bu
         if old is not None and topology(old) == topology(s):
             n = upsert_params(design, s)
             reseat_holders(ctx, system_occ, s)
-            ctx.soft("Part colours", lambda: paint_parts(app, design))
+            ctx.soft("Part colors", lambda: paint_parts(app, design))
             save_design_settings(design, s)
             return "updated in place (%d parameter%s changed)" % (n, "" if n == 1 else "s"), log
         try:

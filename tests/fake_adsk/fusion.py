@@ -218,7 +218,7 @@ class SketchDimension:
         self.parameter = _Parameter(self)
 
     def measured(self) -> float:
-        """Current measured value in millimetres."""
+        """Current measured value in millimeters."""
         if self.kind == "diameter":
             return float(2.0 * self.a.radius / CM_PER_MM)
         if self.kind == "offset":
@@ -997,7 +997,7 @@ class Components:
 
 # ---------------------------------------------------------------- appearances
 class Appearance:
-    """Appearance with colour properties."""
+    """Appearance with color properties."""
 
     def __init__(self, name: str, properties: list[core.ColorProperty]) -> None:
         self.name = name

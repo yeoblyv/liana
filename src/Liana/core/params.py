@@ -83,7 +83,7 @@ def make_params(s: Settings) -> list[ParamSpec]:
         ParamSpec(
             "M3_X",
             "(END_X0 + END_X1) / 2" if lay.nut_side else "(END_X0 + END_X1) / 2 + 1 mm",
-            "(derived) M3 rail-to-comb screws, +-X (centred when the nut enters from the side)",
+            "(derived) M3 rail-to-comb screws, +-X (centered when the nut enters from the side)",
         ),
         ParamSpec("M3_D", fmt(s["m3_d"]), "M3 clearance hole"),
         ParamSpec("M3_CSK", "7 mm", "Countersink for M3 DIN 965"),
@@ -96,7 +96,7 @@ def make_params(s: Settings) -> list[ParamSpec]:
         ParamSpec("NUT_H", fmt(NUT_H), "Nut slot height (2.4 mm nut + clearance)"),
         ParamSpec("NUT_FLARE", "0.5 mm", "Nut slot mouth: extra width per side for an easy start"),
         ParamSpec("M3_CH_GAP", "1 mm", "M3 channel stops this far from the table"),
-        # centre T-pin
+        # center T-pin
         ParamSpec("STEM_HW", fmt(lay.stem_hw), "Pin stem half-width"),
         ParamSpec("CB_HW", "STEM_HW + 1.7 mm", "(derived) pin crossbar half-width"),
         ParamSpec("CB_T", "1.9 mm", "Crossbar thickness"),

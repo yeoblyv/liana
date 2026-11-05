@@ -6,11 +6,11 @@ Extrudes, combines, rounds and countersunk holes with checked directions.
 
 ### `Vec3`
 
-Model point in millimetres.
+Model point in millimeters.
 
 ### `Pt2`
 
-Pair of model coordinates in millimetres.
+Pair of model coordinates in millimeters.
 
 ## Functions
 
@@ -104,7 +104,7 @@ Return the straight edges on the end faces ``Z = +-dz`` inside a window.
 Args:
     bs: Bodies to search.
     dz: Distance of the end faces from Z = 0, in mm.
-    x: Centre of the window along X, in mm.
+    x: Center of the window along X, in mm.
     half_width: Half-width of the window along X, in mm.
     y0: Bottom of the window, in mm.
     y1: Top of the window, in mm.
@@ -119,7 +119,7 @@ Return a point and its mirror image across X = 0.
 ### `corners(x: float, z: float) -> list[Pt2]`
 
 ```text
-Return the four corners of a rectangle centred on the origin.
+Return the four corners of a rectangle centered on the origin.
 ```
 
 ### `fillet(comp: Component, edges: Sequence[BRepEdge], radius: str) -> Feature`
@@ -152,7 +152,7 @@ Args:
     ctx: Build context.
     comp: Component to drill.
     y_expr: Y of the surface the holes start from.
-    pts: Hole centres as ``(x, z)`` expressions.
+    pts: Hole centers as ``(x, z)`` expressions.
     dia: Bore diameter.
     csk: Countersink diameter at the surface.
     angle: Countersink angle.

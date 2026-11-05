@@ -27,7 +27,7 @@ class Point3D:
         return Point3D(x, y, z)
 
     def key(self) -> tuple[float, float, float]:
-        """Rounded millimetre coordinates for traces."""
+        """Rounded millimeter coordinates for traces."""
         return (mm(self.x), mm(self.y), mm(self.z))
 
 
@@ -112,7 +112,7 @@ class Matrix3D:
         return True
 
     def key(self) -> tuple[float, float, float, float]:
-        """Rounded rotation in degrees and translation in millimetres."""
+        """Rounded rotation in degrees and translation in millimeters."""
         return (round(math.degrees(self.angle), 6) + 0.0, *self.translation.key())
 
 
@@ -126,19 +126,19 @@ class Line3D:
 
 
 class Color:
-    """RGBA colour."""
+    """RGBA color."""
 
     def __init__(self, r: int, g: int, b: int, a: int) -> None:
         self.rgba = (r, g, b, a)
 
     @staticmethod
     def create(r: int, g: int, b: int, a: int) -> Color:
-        """Create a colour."""
+        """Create a color."""
         return Color(r, g, b, a)
 
 
 class ColorProperty:
-    """Colour property of an appearance."""
+    """Color property of an appearance."""
 
     def __init__(self, prop_id: str, name: str) -> None:
         self.id = prop_id
@@ -147,12 +147,12 @@ class ColorProperty:
 
     @staticmethod
     def cast(obj: Any) -> ColorProperty | None:
-        """Return ``obj`` if it is a colour property, else None."""
+        """Return ``obj`` if it is a color property, else None."""
         return obj if isinstance(obj, ColorProperty) else None
 
     @property
     def value(self) -> Color | None:
-        """Current colour."""
+        """Current color."""
         return self._value
 
     @value.setter

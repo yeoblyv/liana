@@ -48,7 +48,8 @@ Prepare the add-in; nothing is registered until :meth:`start`.
 Args:
     app: Fusion application.
     storage: Where the last settings and the build log are kept.
-    open_url: Opens a web page in the browser.
+    open_url: Opens a web page in the browser and returns whether a
+        browser accepted it, like :func:`webbrowser.open`.
 ```
 
 #### `LianaAddIn.start(self) -> None`

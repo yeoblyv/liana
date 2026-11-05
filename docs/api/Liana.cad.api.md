@@ -66,15 +66,16 @@ Any timeline feature, e.g. ``adsk.fusion.ExtrudeFeature``.
 
 ### `MM`
 
-One millimetre in Fusion internal units (centimetres).
+One millimeter in Fusion internal units (centimetres).
 
 ### `API_ERRORS`
 
 Exceptions that mean "Fusion refused this call".
 
-Fusion raises RuntimeError for a refused operation, AttributeError when a
-method or property is missing in an older release, and its bindings raise
-NotImplementedError when no overload matches the arguments.
+Fusion raises RuntimeError for a refused operation and AttributeError when a
+method or property is missing in an older release. Its bindings raise
+NotImplementedError when no overload matches the arguments, and TypeError or
+ValueError when an argument cannot be converted.
 
 ### `NEW_BODY`
 
@@ -99,7 +100,7 @@ Return a ``ValueInput`` for an expression.
 ### `point(x: float, y: float, z: float) -> Point`
 
 ```text
-Return a ``Point3D`` from millimetre coordinates.
+Return a ``Point3D`` from millimeter coordinates.
 ```
 
 ### `collection(items: Iterable[Any]) -> Any`
@@ -117,13 +118,13 @@ Return the bodies of a component.
 ### `is_inside(body: BRepBody, p: tuple[float, float, float]) -> bool`
 
 ```text
-Return whether a point in millimetres lies inside a body.
+Return whether a point in millimeters lies inside a body.
 ```
 
 ### `inside(comp: Component, p: tuple[float, float, float]) -> bool`
 
 ```text
-Return whether a point in millimetres lies inside any body of a component.
+Return whether a point in millimeters lies inside any body of a component.
 ```
 
 ### `first_line(error: BaseException) -> str`

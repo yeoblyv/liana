@@ -68,7 +68,7 @@ def load_design_settings(design: Design) -> Settings | None:
         return None
     if not isinstance(raw, dict):
         return None
-    return from_mapping(migrate(raw))
+    return from_mapping(migrate(raw), within_limits=True)
 
 
 def save_design_settings(design: Design, s: Settings) -> None:

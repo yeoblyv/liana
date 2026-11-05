@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2026 Yehor Oblyvantsov
-"""Part colours, so the rail, comb, frame and tie mount stay apart visually."""
+"""Part colors, so the rail, comb, frame and tie mount stay apart visually."""
 
 from __future__ import annotations
 
@@ -27,7 +27,7 @@ PART_COLORS: dict[str, tuple[str, tuple[int, int, int]]] = {
     "X-Frame": ("Liana Blue", (40, 95, 230)),
     "Tie Mount": ("Liana Green", (40, 170, 70)),
 }
-"""Component name to appearance name and RGB colour."""
+"""Component name to appearance name and RGB color."""
 
 _COLOR_PROPERTY_IDS = ("opaque_albedo", "generic_diffuse")
 
@@ -63,19 +63,19 @@ def part_appearance(app: Application, design: Design, name: str, rgb: tuple[int,
     """Return the named appearance of the design, creating it on first use.
 
     A plastic appearance from the Fusion library is copied into the design and
-    its colour property is set.
+    its color property is set.
 
     Args:
         app: Fusion application.
         design: Design that owns the appearance.
         name: Appearance name.
-        rgb: Colour.
+        rgb: Color.
 
     Returns:
         The appearance.
 
     Raises:
-        RuntimeError: The copied appearance has no colour property.
+        RuntimeError: The copied appearance has no color property.
     """
     existing = design.appearances.itemByName(name)
     if existing is not None:
@@ -91,12 +91,12 @@ def part_appearance(app: Application, design: Design, name: str, rgb: tuple[int,
             prop.value = adsk.core.Color.create(rgb[0], rgb[1], rgb[2], 0)
             done = True
     if not done:
-        raise RuntimeError("no colour property in appearance %s" % base.name)
+        raise RuntimeError("no color property in appearance %s" % base.name)
     return appearance
 
 
 def paint_parts(app: Application, design: Design) -> None:
-    """Colour every Liana part of the design: rail red, comb green, frame blue."""
+    """Color every Liana part of the design: rail red, comb green, frame blue."""
     for i in range(design.allComponents.count):
         comp = design.allComponents.item(i)
         if comp.name in PART_COLORS and comp.bRepBodies.count:

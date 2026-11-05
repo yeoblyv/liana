@@ -415,12 +415,12 @@ def test_library_is_found_by_name_and_any_plastic_will_do(
     ]
 
 
-def test_appearance_without_colour_property_fails(world: fake.World) -> None:
+def test_appearance_without_color_property_fails(world: fake.World) -> None:
     app = core.Application.get()
     base = app.materialLibraries.items[1].appearances.items[0]
     gloss = type("Property", (), {"id": "surface_gloss", "name": "Gloss"})()
     base.appearanceProperties.items = [gloss]
-    with pytest.raises(RuntimeError, match="no colour property"):
+    with pytest.raises(RuntimeError, match="no color property"):
         appearance.part_appearance(app, fusion.Design(), "Liana Red", (1, 2, 3))
 
 

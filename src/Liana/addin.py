@@ -56,7 +56,8 @@ class LianaAddIn:
         Args:
             app: Fusion application.
             storage: Where the last settings and the build log are kept.
-            open_url: Opens a web page in the browser.
+            open_url: Opens a web page in the browser and returns whether a
+                browser accepted it, like :func:`webbrowser.open`.
         """
         self.app = app
         self.ui = app.userInterface
@@ -110,8 +111,8 @@ class LianaAddIn:
         for step in steps:
             try:
                 step()
-            except API_ERRORS:
-                pass  # Fusion is shutting down or the item is already gone
+            except Exception:  # Fusion is shutting down or the item is already gone
+                pass
         self._handlers.clear()
         self._command_handlers.clear()
 
@@ -133,6 +134,11 @@ class LianaAddIn:
         """Show the active exception; called from an ``except`` block."""
         self.ui.messageBox("Liana:\n" + traceback.format_exc())
 
+    def _open_page(self, url: str) -> None:
+        """Open a page in the browser, or show its address when no browser opens."""
+        if not self._open_url(url):
+            self.ui.messageBox("Open this page in your web browser:\n" + url, COMMAND_NAME)
+
     def _on_created(self, args: Any) -> None:
         """Open the dialog, filled from the design or from the last run."""
         cmd = args.command
@@ -149,7 +155,7 @@ class LianaAddIn:
         if s is None:
             s = self.storage.load_settings()
         s["new_design"] = False
-        dialog = SettingsDialog(editing, self._open_url)
+        dialog = SettingsDialog(editing, self._open_page)
         dialog.build(cmd.commandInputs, s)
         dialog.refresh(s)
         # input errors are not reported: a message box per keystroke would
@@ -175,7 +181,7 @@ class LianaAddIn:
 
     def _on_build(self, args: Any) -> None:
         """Build the system and report the result."""
-        s = from_mapping(json.loads(args.additionalInfo))
+        s = from_mapping(json.loads(args.additionalInfo), within_limits=True)
         mode, log = generate(self.app, s, self._progress)
         path = self.storage.write_log(log_text(mode, s, log))
         self.ui.messageBox(result_message(mode, log, str(path) if path else ""), COMMAND_NAME)

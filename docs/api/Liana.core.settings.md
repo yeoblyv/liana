@@ -49,7 +49,7 @@ Largest cradle count the dialog offers.
 ### `Settings(TypedDict)`
 
 ```text
-Everything the dialog sets; lengths in millimetres.
+Everything the dialog sets; lengths in millimeters.
 ```
 
 ## Functions
@@ -58,6 +58,15 @@ Everything the dialog sets; lengths in millimetres.
 
 ```text
 Return a fresh copy of the default settings.
+```
+
+### `finite_number(value: object) -> float | None`
+
+```text
+Return ``value`` as a finite float, or None.
+
+Booleans, strings, NaN, infinities and integers too large for a float
+are rejected, so untrusted JSON cannot smuggle them into the arithmetic.
 ```
 
 ### `migrate(raw: dict[str, Any]) -> dict[str, Any]`
@@ -75,19 +84,23 @@ Returns:
     The same dictionary, tagged with :data:`SETTINGS_VERSION`.
 ```
 
-### `from_mapping(raw: object) -> Settings`
+### `from_mapping(raw: object, within_limits: bool=False) -> Settings`
 
 ```text
-Build settings from untrusted data, keeping only well-typed known keys.
+Build settings from data of unknown quality, keeping well-typed known keys.
 
-Values come from JSON files, design attributes or event payloads, so
-unknown keys are dropped and every value is checked against the type of
-its default. Range limits are enforced separately by
-:func:`problems`, which keeps an out-of-range value visible in the
-dialog instead of silently replacing it.
+Unknown keys are dropped and every value is checked against the type of
+its default; numbers must be finite.
+
+Values read back from files, designs or events pass ``within_limits``,
+so an out-of-range value (a cradle count of a billion, say) is replaced
+by the default before any arithmetic runs on it. The dialog leaves it
+off: there an out-of-range value must stay visible and be reported by
+:func:`problems`.
 
 Args:
     raw: Parsed JSON; anything that is not an object yields the defaults.
+    within_limits: Also drop numbers outside :data:`LIMITS`.
 
 Returns:
     Complete settings.

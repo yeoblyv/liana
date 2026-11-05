@@ -38,10 +38,15 @@ class Harness:
         self.world = fake.reset()
         self.app = core.Application.get()
         self.opened: list[str] = []
+        self.browser_works = True
         self.storage = Storage(tmp_path / "data")
-        self.addin = LianaAddIn(self.app, self.storage, self.opened.append)
+        self.addin = LianaAddIn(self.app, self.storage, self.open_url)
         self.world.active_product = fusion.Design()
         self.addin.start()
+
+    def open_url(self, url: str) -> bool:
+        self.opened.append(url)
+        return self.browser_works
 
     def open_dialog(self) -> Any:
         definition = self.app.userInterface.commandDefinitions.itemById(COMMAND_ID)
@@ -154,6 +159,14 @@ def test_reset_and_privacy_buttons(h: Harness) -> None:
     assert h.opened == []
     cmd.change(PRIVACY_ID)
     assert h.opened == [PRIVACY_URL]
+    assert h.world.messages == []
+
+
+def test_privacy_address_is_shown_when_no_browser_opens(h: Harness) -> None:
+    h.browser_works = False
+    cmd = h.open_dialog()
+    cmd.change(PRIVACY_ID)
+    assert h.world.messages == ["Open this page in your web browser:\n" + PRIVACY_URL]
 
 
 def test_input_errors_are_not_shown(h: Harness, monkeypatch: pytest.MonkeyPatch) -> None:

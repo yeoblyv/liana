@@ -72,11 +72,11 @@ def build_comb(ctx: BuildContext, comp: Component, s: Settings) -> None:
     if teeth:
         sk = ParamSketch(ctx, comp, xy, "Comb teeth", 0, 1)
         for t in lay.teeth:
-            centre = pitch_expr(t)
+            center = pitch_expr(t)
             sk.rect(
-                "(%s) - FIN_W / 2" % centre,
+                "(%s) - FIN_W / 2" % center,
                 neg("CABLE_Y + 1 mm"),
-                "(%s) + FIN_W / 2" % centre,
+                "(%s) + FIN_W / 2" % center,
                 neg("CABLE_Y - FIN_H"),
             )
         ext_sym(comp, sk, JOIN, "DEPTH")

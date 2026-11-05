@@ -32,7 +32,7 @@ def diff(a: str, b: str) -> str:
 
 
 def pitch_expr(t: float) -> str:
-    """Return ``t`` cradle pitches from the centre as an expression.
+    """Return ``t`` cradle pitches from the center as an expression.
 
     Args:
         t: Offset in pitches; may be fractional.
@@ -49,7 +49,7 @@ def nut_seat(sx: int, side: bool) -> Outline:
     """Return the outline of one M3 nut seat at ``x = sx * M3_X``.
 
     The seat is an entry slot with a flared mouth that ends in a half hexagon
-    centred on the screw, so the nut slides in by hand, stops on the screw
+    centered on the screw, so the nut slides in by hand, stops on the screw
     axis and cannot turn.
 
     Args:
@@ -82,7 +82,7 @@ def nut_seat(sx: int, side: bool) -> Outline:
             ("%s - (%s)" % (c, f), face),
         ]
         return [(x(u), v) for u, v in pts]
-    # slot along X towards the end face: flats on the +-Z walls, half hexagon towards the centre
+    # slot along X towards the end face: flats on the +-Z walls, half hexagon towards the center
     out, face, inner = "END_X1 + 2 mm", "END_X1", "END_X1 - 1.5 mm"
     pts = [
         (out, "-(%s)" % f),
@@ -108,7 +108,7 @@ def member_coords(side: Side, width: str, half_len: str) -> tuple[str, str, str,
 
     Returns:
         Opposite corners with ``u`` along X and ``v`` along Z, relative to
-        the frame centre.
+        the frame center.
     """
     a_expr = "FRAME_A"
     w2 = "(%s) / 2" % width
@@ -129,7 +129,7 @@ def holder_hole_exprs(side_screws: bool, ev: Callable[[str], float]) -> list[str
 
     Args:
         side_screws: Whether the holder has side screws next to the pin.
-        ev: Evaluates an expression to millimetres.
+        ev: Evaluates an expression to millimeters.
 
     Returns:
         X expressions of the holes.

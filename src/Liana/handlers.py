@@ -26,13 +26,18 @@ class CommandCreated(adsk.core.CommandCreatedEventHandler):  # type: ignore[misc
     """Forwards ``commandCreated``."""
 
     def __init__(self, callback: Callback, on_error: ErrorCallback) -> None:
-        """Wrap a callback."""
+        """Wrap a callback.
+
+        Args:
+            callback: Receives the event arguments.
+            on_error: Called when ``callback`` raises.
+        """
         super().__init__()
         self._callback = callback
         self._on_error = on_error
 
     def notify(self, args: Any) -> None:
-        """Called by Fusion."""
+        """Pass the event arguments to the callback."""
         try:
             self._callback(args)
         except Exception:  # report anything rather than lose it inside Fusion
@@ -43,13 +48,18 @@ class InputChanged(adsk.core.InputChangedEventHandler):  # type: ignore[misc]  #
     """Forwards ``inputChanged``."""
 
     def __init__(self, callback: Callback, on_error: ErrorCallback) -> None:
-        """Wrap a callback."""
+        """Wrap a callback.
+
+        Args:
+            callback: Receives the event arguments.
+            on_error: Called when ``callback`` raises.
+        """
         super().__init__()
         self._callback = callback
         self._on_error = on_error
 
     def notify(self, args: Any) -> None:
-        """Called by Fusion."""
+        """Pass the event arguments to the callback."""
         try:
             self._callback(args)
         except Exception:  # report anything rather than lose it inside Fusion
@@ -60,12 +70,16 @@ class ValidateInputs(adsk.core.ValidateInputsEventHandler):  # type: ignore[misc
     """Forwards ``validateInputs``; an error disables the OK button."""
 
     def __init__(self, callback: Callable[[], bool]) -> None:
-        """Wrap a callback that returns whether the inputs are valid."""
+        """Wrap a callback.
+
+        Args:
+            callback: Returns whether the inputs are valid.
+        """
         super().__init__()
         self._callback = callback
 
     def notify(self, args: Any) -> None:
-        """Called by Fusion."""
+        """Set ``args.areInputsValid`` from the callback."""
         try:
             args.areInputsValid = self._callback()
         except Exception:  # an input that cannot be read is not valid
@@ -76,13 +90,18 @@ class CommandExecute(adsk.core.CommandEventHandler):  # type: ignore[misc]  # un
     """Forwards ``execute``."""
 
     def __init__(self, callback: Callback, on_error: ErrorCallback) -> None:
-        """Wrap a callback."""
+        """Wrap a callback.
+
+        Args:
+            callback: Receives the event arguments.
+            on_error: Called when ``callback`` raises.
+        """
         super().__init__()
         self._callback = callback
         self._on_error = on_error
 
     def notify(self, args: Any) -> None:
-        """Called by Fusion."""
+        """Pass the event arguments to the callback."""
         try:
             self._callback(args)
         except Exception:  # report anything rather than lose it inside Fusion
@@ -93,13 +112,18 @@ class CustomEvent(adsk.core.CustomEventHandler):  # type: ignore[misc]  # untype
     """Forwards a custom event."""
 
     def __init__(self, callback: Callback, on_error: ErrorCallback) -> None:
-        """Wrap a callback."""
+        """Wrap a callback.
+
+        Args:
+            callback: Receives the event arguments.
+            on_error: Called when ``callback`` raises.
+        """
         super().__init__()
         self._callback = callback
         self._on_error = on_error
 
     def notify(self, args: Any) -> None:
-        """Called by Fusion."""
+        """Pass the event arguments to the callback."""
         try:
             self._callback(args)
         except Exception:  # report anything rather than lose it inside Fusion
