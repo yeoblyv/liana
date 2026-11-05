@@ -18,6 +18,7 @@ Usage:
 from __future__ import annotations
 
 import hashlib
+import stat
 import sys
 import time
 import zipfile
@@ -71,7 +72,7 @@ def _entry(name: str, when: time.struct_time) -> zipfile.ZipInfo:
     info = zipfile.ZipInfo(name, stamp)
     info.compress_type = zipfile.ZIP_DEFLATED
     info.create_system = 3  # Unix, on every platform, so the bytes do not depend on it
-    info.external_attr = 0o644 << 16
+    info.external_attr = (stat.S_IFREG | 0o644) << 16  # a regular file, rw-r--r--
     return info
 
 
