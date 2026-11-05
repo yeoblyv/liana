@@ -1,0 +1,45 @@
+# Liana is an Autodesk Fusion add-in, not a pip package: this file holds the
+# version and the configuration of the development tools.
+
+[project]
+name = "liana"
+version = "1.0.0"
+description = "Parametric under-desk cable holders for Autodesk Fusion"
+license = "Apache-2.0"
+authors = [{ name = "Yehor Oblyvantsov", email = "xineraman8@gmail.com" }]
+requires-python = ">=3.12"
+readme = "README.md"
+
+[tool.black]
+line-length = 99
+target-version = ["py312"]
+
+[tool.isort]
+profile = "black"
+line_length = 99
+known_first_party = ["Liana", "tests"]
+known_third_party = ["adsk"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+mypy_path = "src,scripts"
+explicit_package_bases = true
+files = ["src", "tests", "scripts"]
+
+[[tool.mypy.overrides]]
+module = ["adsk", "adsk.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-p no:cacheprovider --strict-markers"
+
+[tool.coverage.run]
+source = ["src/Liana"]
+branch = true
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+skip_covered = true

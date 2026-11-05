@@ -1,0 +1,5 @@
+# Text files use LF in the repository and in builds, on every platform.
+* text=auto eol=lf
+*.png binary
+*.gz binary
+*.zip binary
