@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2026 Yehor Oblyvantsov
-"""Version of the add-in; written by ``scripts/bump_version.py`` and the build."""
+"""Version of the add-in; written by ``scripts/bump_version.py``."""
 
 __version__ = "1.0.0"
-"""Semantic version; untagged builds append ``+g<commit>``."""
+"""Semantic version, the same as in ``pyproject.toml`` and the manifest."""

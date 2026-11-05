@@ -77,20 +77,3 @@ def git(*args: str) -> str | None:
     except (OSError, subprocess.CalledProcessError):
         return None
     return done.stdout.strip()
-
-
-def build_version(version: str) -> str:
-    """Return the version to stamp into a build.
-
-    A build of the commit tagged ``v<version>`` with a clean tree gets the
-    plain version; anything else gets ``+g<commit>`` and ``.dirty`` for
-    uncommitted changes, so a test build is never mistaken for a release.
-    """
-    commit = git("rev-parse", "--short=12", "HEAD")
-    if commit is None:
-        return version + "+local"
-    dirty = bool(git("status", "--porcelain", "--untracked-files=no"))
-    tags = (git("tag", "--points-at", "HEAD") or "").split()
-    if "v" + version in tags and not dirty:
-        return version
-    return "%s+g%s%s" % (version, commit, ".dirty" if dirty else "")

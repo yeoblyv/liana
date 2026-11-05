@@ -14,7 +14,7 @@ status: stable
 ![status](https://img.shields.io/badge/status-stable-2ea44f)
 ![since](https://img.shields.io/badge/since-1.0.0-5b4fe0)
 
-Version of the add-in; written by `scripts/bump_version.py` and the build.
+Version of the add-in; written by `scripts/bump_version.py`.
 
 ## On this page
 

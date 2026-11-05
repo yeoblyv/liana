@@ -11,6 +11,8 @@ times. The new times matter because Python reuses cached bytecode in
 ``__pycache__`` when a source file keeps its size and time, so an update
 unpacked over an older build would otherwise keep running the old code.
 
+The version is the plain semantic version from ``pyproject.toml``.
+
 Usage:
     python scripts/build.py
     python scripts/build.py --expect-version 1.0.0   # fail unless the build carries it
@@ -28,15 +30,7 @@ import time
 import zipfile
 from pathlib import Path
 
-from _project import (
-    ADDIN,
-    ROOT,
-    build_version,
-    git,
-    project_version,
-    replace_manifest_version,
-    replace_module_version,
-)
+from _project import ADDIN, ROOT, git, manifest_version, module_version, project_version
 
 DIST = ROOT / "dist"
 """Output folder."""
@@ -80,25 +74,27 @@ def _entry(name: str, when: time.struct_time) -> zipfile.ZipInfo:
     return info
 
 
-def build(version: str) -> Path:
+def build() -> Path:
     """Write the archive and its checksum file.
 
-    Args:
-        version: Version stamped into the manifest and ``_version.py``.
+    The archive is named after the version in ``pyproject.toml``; the
+    manifest and ``_version.py`` must hold the same version.
 
     Returns:
         Path of the archive.
+
+    Raises:
+        SystemExit: The version copies disagree.
     """
+    version = project_version()
+    if (manifest_version(), module_version()) != (version, version):
+        raise SystemExit("version copies disagree: run python scripts/bump_version.py --check")
     DIST.mkdir(exist_ok=True)
     archive = DIST / ("Liana-%s.zip" % version)
-    contents: list[tuple[str, bytes]] = []
-    for path in addin_files():
-        data = path.read_bytes()
-        if path.name == "Liana.manifest":
-            data = replace_manifest_version(data.decode("utf-8"), version).encode("utf-8")
-        elif path.name == "_version.py":
-            data = replace_module_version(data.decode("utf-8"), version).encode("utf-8")
-        contents.append(("Liana/" + path.relative_to(ADDIN).as_posix(), data))
+    contents = [
+        ("Liana/" + path.relative_to(ADDIN).as_posix(), path.read_bytes())
+        for path in addin_files()
+    ]
     for name in EXTRA_FILES:
         contents.append(("Liana/" + name, (ROOT / name).read_bytes()))
     when = build_time()
@@ -112,7 +108,7 @@ def build(version: str) -> Path:
 
 
 def archive_versions(archive: Path) -> tuple[str, str]:
-    """Return the versions stamped into an archive: manifest and ``_version.py``."""
+    """Return the versions inside an archive: manifest and ``_version.py``."""
     with zipfile.ZipFile(archive) as zf:
         manifest = json.loads(zf.read("Liana/Liana.manifest").decode("utf-8"))["version"]
         module = re.search(
@@ -126,7 +122,7 @@ def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--expect-version", help="fail unless the archive carries this version")
     args = parser.parse_args(argv)
-    archive = build(build_version(project_version()))
+    archive = build()
     print(archive.relative_to(ROOT).as_posix())
     print(archive.with_name(archive.name + ".sha256").read_text(encoding="utf-8").strip())
     if args.expect_version is not None:

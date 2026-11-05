@@ -49,9 +49,8 @@ python scripts/build.py
 writes `dist/Liana-<version>.zip` with one `Liana` folder inside, and
 `dist/Liana-<version>.zip.sha256`. Only files tracked by git are packed.
 
-- A build of the commit tagged `v<version>` with a clean tree carries the
-  plain version. Any other build carries `<version>+g<commit>`, with
-  `.dirty` for uncommitted changes, in the manifest and in the dialog.
+- The archive, the manifest and the dialog carry the plain semantic
+  version from `pyproject.toml`; the build stops if the copies disagree.
 - Entries are dated with the commit time: one commit built with the same
   Python gives the same bytes, and a new commit gives new file times, so
   Python does not reuse bytecode cached for an older build.

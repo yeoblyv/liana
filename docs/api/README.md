@@ -27,7 +27,7 @@ Every public constant, class, function and method of the add-in, generated from 
 | Module | Summary |
 |---|---|
 | [`Liana.Liana`](Liana.Liana.md) | Liana for Autodesk Fusion: parametric under-desk cable holders. |
-| [`Liana._version`](Liana._version.md) | Version of the add-in; written by `scripts/bump_version.py` and the build. |
+| [`Liana._version`](Liana._version.md) | Version of the add-in; written by `scripts/bump_version.py`. |
 | [`Liana.addin`](Liana.addin.md) | The add-in: registers the Liana command and runs builds. |
 | [`Liana.cad`](Liana.cad.md) | Modelling with the Fusion API: sketches, features, parts and the system. |
 | [`Liana.cad.api`](Liana.cad.api.md) | Thin helpers over the Fusion API used by every builder. |
