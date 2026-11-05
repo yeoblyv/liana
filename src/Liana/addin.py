@@ -13,7 +13,7 @@ from typing import Any
 import adsk.fusion
 
 from .cad.api import API_ERRORS, Application
-from .cad.design import find_system, load_design_settings
+from .cad.design import find_system, load_design_settings, with_parameter_values
 from .cad.system import Progress, generate
 from .core.report import log_text, result_message
 from .core.settings import from_mapping
@@ -151,6 +151,8 @@ class LianaAddIn:
         s = None
         if design is not None and find_system(design) is not None:
             s = load_design_settings(design)
+            if s is not None:
+                s = with_parameter_values(design, s)
         editing = s is not None
         if s is None:
             s = self.storage.load_settings()

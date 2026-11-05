@@ -8,6 +8,10 @@ Design-level helpers: documents, components, attributes and parameters.
 
 Attribute group of everything Liana stores in a design.
 
+### `SETTING_PARAMETERS`
+
+Dialog settings that are User Parameters of their own, by parameter name.
+
 ## Functions
 
 ### `tag(occ: Occurrence, place: str) -> None`
@@ -48,6 +52,22 @@ The stored JSON is untrusted: the design may come from anyone.
 
 ```text
 Store the settings in the design, so running Liana again edits it.
+```
+
+### `with_parameter_values(design: Design, s: Settings) -> Settings`
+
+```text
+Return the settings with the sizes the design's User Parameters hold now.
+
+A size changed in Change Parameters is not in the settings stored with
+the system; without this the next Generate would set it back.
+
+Args:
+    design: Design with a Liana system.
+    s: Settings stored with the system.
+
+Returns:
+    The settings, with every in-range parameter value taken over.
 ```
 
 ### `upsert_params(design: Design, s: Settings) -> int`

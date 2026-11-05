@@ -106,6 +106,12 @@ Returns:
     Complete settings.
 ```
 
+### `in_limits(key: str, value: float) -> bool`
+
+```text
+Return whether a value is inside the dialog limits of its setting.
+```
+
 ### `problems(s: Settings, fits_bed: bool) -> list[str]`
 
 ```text

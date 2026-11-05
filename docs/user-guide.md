@@ -94,7 +94,8 @@ defaults** restores every value.
 ## Editing a system
 
 Run Liana on a design it built and the dialog opens with that design's
-settings ("Editing the system in this design"). Then:
+settings ("Editing the system in this design"), including sizes you changed
+in **Change Parameters** since. Then:
 
 - If only sizes change, the User Parameters are updated in place and the
   model recomputes.

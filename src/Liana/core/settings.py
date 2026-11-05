@@ -200,11 +200,11 @@ def from_mapping(raw: object, within_limits: bool = False) -> Settings:
                 merged[key] = value
         elif isinstance(default, int):
             if isinstance(value, int) and not isinstance(value, bool):
-                if not within_limits or _in_limits(key, value):
+                if not within_limits or in_limits(key, value):
                     merged[key] = value
         elif isinstance(default, float):
             number = finite_number(value)
-            if number is not None and (not within_limits or _in_limits(key, number)):
+            if number is not None and (not within_limits or in_limits(key, number)):
                 merged[key] = number
         elif key == "mount":
             if value in get_args(Mount):
@@ -212,7 +212,8 @@ def from_mapping(raw: object, within_limits: bool = False) -> Settings:
     return cast(Settings, merged)
 
 
-def _in_limits(key: str, value: float) -> bool:
+def in_limits(key: str, value: float) -> bool:
+    """Return whether a value is inside the dialog limits of its setting."""
     if key not in LIMITS:
         return True
     lo, hi = LIMITS[key]

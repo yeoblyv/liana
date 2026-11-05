@@ -1093,6 +1093,11 @@ class UserParameter:
         w.trace_event("parameter.expression", self.name, expr)
 
     @property
+    def value(self) -> float:
+        """Current value in internal units (cm)."""
+        return world().values[self.name] * CM_PER_MM
+
+    @property
     def comment(self) -> str:
         """Comment."""
         return self._comment

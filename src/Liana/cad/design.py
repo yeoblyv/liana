@@ -9,9 +9,10 @@ import json
 import adsk.core
 import adsk.fusion
 
+from ..core.layout import layout
 from ..core.params import ANGLE_PARAMS, make_params
-from ..core.settings import Settings, from_mapping, migrate
-from .api import API_ERRORS, Application, Component, Design, Occurrence, value
+from ..core.settings import Settings, from_mapping, in_limits, migrate
+from .api import API_ERRORS, MM, Application, Component, Design, Occurrence, value
 
 ATTR_GROUP = "Liana"
 """Attribute group of everything Liana stores in a design."""
@@ -77,6 +78,58 @@ def save_design_settings(design: Design, s: Settings) -> None:
         design.attributes.add(ATTR_GROUP, "settings", json.dumps(s))
     except API_ERRORS:
         pass  # without them the next run starts from the last dialog values
+
+
+SETTING_PARAMETERS: dict[str, str] = {
+    "cable_d": "CABLE_D",
+    "tooth_w": "FIN_W",
+    "depth": "DEPTH",
+    "screw_d": "WS_D",
+    "screw_csk": "WS_CSK",
+    "m3_d": "M3_D",
+    "nut_af": "NUT_AF",
+    "clr": "CLR_X",
+    "frame_t": "FRAME_T",
+    "tm_l": "TM_L",
+    "tm_w": "TM_W",
+    "tm_h": "TM_H",
+    "tie_w": "TIE_SLOT_W",
+}
+"""Dialog settings that are User Parameters of their own, by parameter name."""
+
+
+def _parameter_mm(design: Design, name: str) -> float | None:
+    try:
+        param = design.userParameters.itemByName(name)
+        return None if param is None else round(float(param.value) / MM, 4)
+    except API_ERRORS:
+        return None
+
+
+def with_parameter_values(design: Design, s: Settings) -> Settings:
+    """Return the settings with the sizes the design's User Parameters hold now.
+
+    A size changed in Change Parameters is not in the settings stored with
+    the system; without this the next Generate would set it back.
+
+    Args:
+        design: Design with a Liana system.
+        s: Settings stored with the system.
+
+    Returns:
+        The settings, with every in-range parameter value taken over.
+    """
+    values: dict[str, object] = dict(s)
+    for key, name in SETTING_PARAMETERS.items():
+        mm = _parameter_mm(design, name)
+        if mm is not None and in_limits(key, mm):
+            values[key] = mm
+    # BEAM_W holds the beam actually built, which may be widened for the holder;
+    # a value other than the one Liana computed was set by hand
+    beam = _parameter_mm(design, "BEAM_W")
+    if beam is not None and abs(beam - layout(s).bw) > 1e-6 and in_limits("beam_w", beam):
+        values["beam_w"] = beam
+    return from_mapping(values)
 
 
 def upsert_params(design: Design, s: Settings) -> int:

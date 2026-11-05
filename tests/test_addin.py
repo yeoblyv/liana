@@ -239,6 +239,33 @@ def test_reopening_edits_the_system_in_the_design(h: Harness) -> None:
     assert h.world.messages[-1].startswith("Liana: system updated in place (")
 
 
+def test_dialog_shows_sizes_changed_in_change_parameters(h: Harness) -> None:
+    cmd = h.open_dialog()
+    cmd.click_ok()
+    params = h.world.active_product.userParameters
+    params.itemByName("CABLE_D").expression = "11 mm"
+    params.itemByName("BEAM_W").expression = "20 mm"
+    params.itemByName("TM_L").expression = "500 mm"  # out of range: ignored
+    cmd = h.open_dialog()
+    inputs = cmd.commandInputs
+    assert inputs.itemById("cable_d").value == pytest.approx(1.1)
+    assert inputs.itemById("beam_w").value == pytest.approx(2.0)
+    assert inputs.itemById("tm_l").value == pytest.approx(3.6)
+    assert "for 11.0 mm cables" in summary(cmd)
+    cmd.click_ok()
+    assert h.world.messages[-1].startswith("Liana: system updated in place (")
+    assert h.world.expressions["CABLE_D"] == "11 mm"
+    assert h.world.expressions["BEAM_W"] == "20 mm"
+
+
+def test_widened_beam_is_not_taken_as_a_setting(h: Harness) -> None:
+    h.storage.save_settings(from_mapping({"depth": 20.0}))
+    cmd = h.open_dialog()
+    cmd.click_ok()
+    cmd = h.open_dialog()
+    assert cmd.commandInputs.itemById("beam_w").value == pytest.approx(1.8)
+
+
 def test_new_dialog_starts_from_the_last_settings(h: Harness) -> None:
     h.storage.save_settings(from_mapping({"cradles": 5, "new_design": True}))
     cmd = h.open_dialog()

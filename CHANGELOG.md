@@ -29,6 +29,8 @@ First public release.
   parameters in place, or rebuilds the system when the layout changes.
 - Part colors: rail red, comb green, frame blue, tie mount green.
 - Toolbar icon in SVG for the Light Gray and Dark Blue themes.
+- Editing a system starts from the sizes in its User Parameters, so
+  changes made in Change Parameters are kept.
 - Privacy policy group in the dialog with the full policy text and a
   button that opens its online version; the version number is shown
   next to it.
