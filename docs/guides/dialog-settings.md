@@ -105,6 +105,10 @@ A rail longer than the bed may still fit diagonally; the summary says so.
 The frame must fit the shorter side of the bed. **Reset to defaults**
 restores every value.
 
+A box with letters or no value turns red and keeps **Generate** off until
+you type a number into it. **Reset to defaults** leaves such a box as it
+is, so you can see which one to fix.
+
 ## Privacy policy
 
 A collapsed group above the summary holds the full privacy policy. Its

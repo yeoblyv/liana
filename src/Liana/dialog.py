@@ -331,17 +331,13 @@ class SettingsDialog:
             inp = self._inputs.get(key)
             if inp is None:
                 continue
+            # A box the user typed letters into keeps its text: Fusion keeps
+            # such a box invalid until the user edits it, so overwriting the
+            # text would show a valid number while Generate stays off.
             if kind == "int":
-                # Fusion redraws a spinner only when its value changes, so
-                # text typed over it (letters, nothing) would survive a value
-                # equal to the last valid one: step to another value first.
-                count = int(values[key])
-                lo, hi = (int(limit) for limit in LIMITS[key])
-                inp.value = lo if count != lo else hi
-                inp.value = count
+                inp.value = int(values[key])
             elif kind == "mm":
-                # the expression, not the value, for the same reason
-                inp.expression = "%g mm" % float(values[key])
+                inp.value = float(values[key]) * MM
             elif kind == "bool":
                 inp.value = bool(values[key])
             else:
