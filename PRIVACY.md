@@ -5,8 +5,8 @@ Last updated: 5 November 2026.
 Liana is an add-in for Autodesk Fusion published by Yehor Oblyvantsov,
 Groningen, the Netherlands. Contact: support@oblyvantsov.net.
 
-The same text is shown in Liana itself: click Privacy policy at the bottom
-of the Liana dialog.
+The same text is in Liana itself: open the Liana dialog and expand
+Privacy policy.
 
 ## 1. What data Liana collects and how it is used
 
@@ -73,9 +73,9 @@ GitHub's privacy statement.
 ## Online version
 
 This policy is published at
-https://github.com/yeoblyv/liana/blob/main/PRIVACY.md. The Privacy policy
-button in Liana can open that page in your web browser; GitHub's privacy
-statement applies to that visit.
+https://github.com/yeoblyv/liana/blob/main/PRIVACY.md. The Open online
+version button under Privacy policy in the Liana dialog opens that page in
+your web browser; GitHub's privacy statement applies to that visit.
 
 ## Changes
 

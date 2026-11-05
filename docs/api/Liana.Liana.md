@@ -17,4 +17,8 @@ Start the add-in (called by Fusion).
 
 ```text
 Stop the add-in (called by Fusion).
+
+The add-in's other modules are dropped from the import cache, so that
+Run after an update loads the new code instead of the modules Python
+kept in memory.
 ```

@@ -14,7 +14,15 @@ Input id of the reset button.
 
 ### `PRIVACY_ID`
 
-Input id of the privacy policy button.
+Input id of the button that opens the online privacy policy.
+
+### `PRIVACY_GROUP_ID`
+
+Input id of the collapsed group with the privacy policy text.
+
+### `POLICY_TEXT_ID`
+
+Input id of the text box with the privacy policy.
 
 ### `SUMMARY_ID`
 
@@ -67,14 +75,14 @@ Attributes:
     editing: Whether the dialog edits a system already in the design.
 ```
 
-#### `SettingsDialog.__init__(self, editing: bool, show_policy: Callable[[], None]) -> None`
+#### `SettingsDialog.__init__(self, editing: bool, open_url: Callable[[str], None]) -> None`
 
 ```text
 Prepare a dialog; inputs are created by :meth:`build`.
 
 Args:
     editing: Whether the dialog edits a system already in the design.
-    show_policy: Shows the privacy policy.
+    open_url: Opens a web page in the browser.
 ```
 
 #### `SettingsDialog.build(self, inputs: Any, s: Settings) -> None`

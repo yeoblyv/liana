@@ -69,9 +69,9 @@ three places. Check them before each submission:
 1. **Description page.** The listing links to
    https://github.com/yeoblyv/liana/blob/main/PRIVACY.md, and the repository
    is public so the link opens.
-2. **Link inside the app.** The **Privacy policy** button in the dialog
-   offers to open the same page.
-3. **Text inside the app.** The same button shows the full text, from
+2. **Link inside the app.** The **Open online version** button in the
+   **Privacy policy** group of the dialog opens the same page.
+3. **Text inside the app.** The same group shows the full text, from
    `src/Liana/privacy.py`. When `PRIVACY.md` changes, copy it into
    `POLICY_MARKDOWN`; the tests fail until the two match.
 

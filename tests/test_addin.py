@@ -20,13 +20,15 @@ from Liana.core.settings import DEFAULTS, from_mapping
 from Liana.dialog import (
     GROUPS,
     KINDS,
+    POLICY_TEXT_ID,
+    PRIVACY_GROUP_ID,
     PRIVACY_ID,
     RESET_ID,
     SUMMARY_ID,
     mount_key,
     mount_label,
 )
-from Liana.privacy import POLICY_MARKDOWN, POLICY_TITLE, POLICY_URL, policy_text
+from Liana.privacy import POLICY_MARKDOWN, POLICY_TITLE, POLICY_URL, policy_html, policy_text
 from Liana.storage import Storage
 from tests.fake_adsk import core, fusion
 
@@ -111,7 +113,13 @@ def test_dialog_shows_every_setting_and_the_version(h: Harness) -> None:
     assert [g.id for g in GROUPS] == [i.id for i in inputs.order[: len(GROUPS)]]
     assert inputs.itemById("cradles").tooltip.startswith("Number of cable cradles")
     assert inputs.itemById(PRIVACY_ID).name == "Liana " + __version__
-    assert inputs.itemById(PRIVACY_ID).text == "Privacy policy"
+    assert inputs.itemById(PRIVACY_ID).text == "Open online version"
+    group = inputs.itemById(PRIVACY_GROUP_ID)
+    assert group.name == POLICY_TITLE and group.isExpanded is False
+    assert inputs.itemById(POLICY_TEXT_ID).formattedText == policy_html()
+    # the policy group comes before the summary, so its header shows without scrolling
+    ids = [i.id for i in inputs.order]
+    assert ids.index(PRIVACY_GROUP_ID) < ids.index(SUMMARY_ID)
     assert summary(cmd).startswith("<b>10 cradles</b>")
     assert inputs.itemById("mount").selectedItem.name == mount_label("X")
 
@@ -159,24 +167,18 @@ def test_reset_and_privacy_buttons(h: Harness) -> None:
     assert h.world.messages == []
 
 
-def test_privacy_button_shows_the_policy_and_can_open_it(h: Harness) -> None:
+def test_open_online_version(h: Harness) -> None:
     cmd = h.open_dialog()
-    cmd.change(PRIVACY_ID)  # the user answers No
-    assert h.world.messages == [policy_text() + "\n\nOpen the online version in your web browser?"]
-    assert ("messageBox", POLICY_TITLE, h.world.messages[0]) in h.world.trace
-    assert h.opened == []
-    h.world.answer = "DialogYes"
     cmd.change(PRIVACY_ID)
     assert h.opened == [POLICY_URL]
-    assert len(h.world.messages) == 2
+    assert h.world.messages == []
 
 
 def test_privacy_address_is_shown_when_no_browser_opens(h: Harness) -> None:
     h.browser_works = False
-    h.world.answer = "DialogYes"
     cmd = h.open_dialog()
     cmd.change(PRIVACY_ID)
-    assert h.world.messages[-1] == "Open this page in your web browser:\n" + POLICY_URL
+    assert h.world.messages == ["Open this page in your web browser:\n" + POLICY_URL]
 
 
 def test_policy_in_the_add_in_matches_privacy_md() -> None:
@@ -197,6 +199,9 @@ def test_policy_text_covers_what_autodesk_asks_for() -> None:
         assert "\n\n" + heading + "\n\n" in text
     assert "#" not in text and "  " not in text
     assert POLICY_URL in text
+    html_text = policy_html()
+    assert "<b>4. Revoking consent and deleting your data</b>" in html_text
+    assert "%APPDATA%\\Liana" in html_text
 
 
 def test_input_errors_are_not_shown(h: Harness, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -313,6 +318,20 @@ def test_entry_point_runs_and_stops(tmp_path: Path, monkeypatch: pytest.MonkeyPa
     assert ui.commandDefinitions.itemById(COMMAND_ID) is None
     entry.stop({})
     assert fake.world().messages == []
+
+
+def test_stop_drops_the_cached_modules(tmp_path: Path) -> None:
+    import sys
+
+    fake.reset()
+    # load the main file again, as Fusion does for Run
+    entry = importlib.reload(importlib.import_module("Liana.Liana"))
+    entry.run({})
+    assert "Liana.addin" in sys.modules
+    entry.stop({})
+    assert "Liana.addin" not in sys.modules and "Liana.cad.system" not in sys.modules
+    assert "Liana.Liana" in sys.modules
+    importlib.import_module("Liana.addin")  # later imports load the code again
 
 
 def test_settings_from_the_event_are_sanitised(h: Harness) -> None:

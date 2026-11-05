@@ -28,16 +28,17 @@ the operating system with the results.
 
 1. Open the dialog in an empty design. The summary starts with
    "10 cradles", all groups are present, and the version next to
-   **Privacy policy** matches the release.
+   **Open online version** in the **Privacy policy** group matches the
+   release.
 2. Set cradles to 3: **Center T-pin** is grayed out.
 3. Untick **X-frame**: **Show holders on the frame** is grayed out.
 4. Set the bed to 100 x 100: the summary marks parts that do not fit and
    **Generate** is off. Restore the bed size.
 5. Type an invalid length such as `abc`: **Generate** is off.
 6. Click **Reset to defaults**: every value returns to its default.
-7. Click **Privacy policy**: a window shows the full policy, with sections
-   1 to 4, and asks whether to open the online version. **No** closes it;
-   **Yes** opens the policy page in the default browser.
+7. Expand **Privacy policy**: the full policy, sections 1 to 4, scrolls
+   in the text box. **Open online version** opens the policy page in the
+   default browser.
 
 ## Builds
 

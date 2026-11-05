@@ -14,7 +14,7 @@ Online version of the policy.
 
 ### `POLICY_TITLE`
 
-Title of the policy window.
+Title of the dialog group that shows the policy.
 
 ### `POLICY_MARKDOWN`
 
@@ -25,8 +25,11 @@ The policy as written in ``PRIVACY.md``.
 ### `policy_text() -> str`
 
 ```text
-Return the policy as plain text for a message box.
+Return the policy as plain text.
+```
 
-Heading marks are removed and the lines of each paragraph or list item
-are joined, so the window wraps the text to its own width.
+### `policy_html() -> str`
+
+```text
+Return the policy as text-box HTML, with the headings in bold.
 ```

@@ -9,11 +9,13 @@ a test keeps the two identical.
 
 from __future__ import annotations
 
+import html
+
 POLICY_URL = "https://github.com/yeoblyv/liana/blob/main/PRIVACY.md"
 """Online version of the policy."""
 
-POLICY_TITLE = "Liana privacy policy"
-"""Title of the policy window."""
+POLICY_TITLE = "Privacy policy"
+"""Title of the dialog group that shows the policy."""
 
 POLICY_MARKDOWN = r"""# Liana privacy policy
 
@@ -22,8 +24,8 @@ Last updated: 5 November 2026.
 Liana is an add-in for Autodesk Fusion published by Yehor Oblyvantsov,
 Groningen, the Netherlands. Contact: support@oblyvantsov.net.
 
-The same text is shown in Liana itself: click Privacy policy at the bottom
-of the Liana dialog.
+The same text is in Liana itself: open the Liana dialog and expand
+Privacy policy.
 
 ## 1. What data Liana collects and how it is used
 
@@ -90,9 +92,9 @@ GitHub's privacy statement.
 ## Online version
 
 This policy is published at
-https://github.com/yeoblyv/liana/blob/main/PRIVACY.md. The Privacy policy
-button in Liana can open that page in your web browser; GitHub's privacy
-statement applies to that visit.
+https://github.com/yeoblyv/liana/blob/main/PRIVACY.md. The Open online
+version button under Privacy policy in the Liana dialog opens that page in
+your web browser; GitHub's privacy statement applies to that visit.
 
 ## Changes
 
@@ -102,17 +104,17 @@ and in the next release of Liana.
 """The policy as written in ``PRIVACY.md``."""
 
 
-def policy_text() -> str:
-    """Return the policy as plain text for a message box.
+def _blocks() -> list[tuple[bool, str]]:
+    """Split the policy into ``(is_heading, text)`` blocks.
 
     Heading marks are removed and the lines of each paragraph or list item
-    are joined, so the window wraps the text to its own width.
+    are joined, so the text wraps to the width of wherever it is shown.
     """
-    blocks: list[str] = []
+    blocks: list[tuple[bool, str]] = []
     for block in POLICY_MARKDOWN.strip().split("\n\n"):
         lines = [line.strip() for line in block.splitlines()]
         if lines[0].startswith("#"):
-            blocks.append(" ".join(lines).lstrip("#").strip())
+            blocks.append((True, " ".join(lines).lstrip("#").strip()))
             continue
         items: list[str] = []
         for line in lines:
@@ -120,5 +122,19 @@ def policy_text() -> str:
                 items.append(line)
             else:
                 items[-1] += " " + line
-        blocks.append("\n".join(items))
-    return "\n\n".join(blocks)
+        blocks.append((False, "\n".join(items)))
+    return blocks
+
+
+def policy_text() -> str:
+    """Return the policy as plain text."""
+    return "\n\n".join(text for _, text in _blocks())
+
+
+def policy_html() -> str:
+    """Return the policy as text-box HTML, with the headings in bold."""
+    parts = []
+    for heading, text in _blocks():
+        escaped = html.escape(text, quote=False).replace("\n", "<br>")
+        parts.append("<b>%s</b>" % escaped if heading else escaped)
+    return "<br><br>".join(parts)

@@ -14,6 +14,7 @@ from .cad.api import API_ERRORS, MM
 from .core.layout import fit_report
 from .core.report import summary_html
 from .core.settings import DEFAULTS, LIMITS, MOUNTS, Mount, Settings, from_mapping, problems
+from .privacy import POLICY_TITLE, POLICY_URL, policy_html
 
 FieldKind = Literal["int", "mm", "bool", "mount"]
 """How a setting is shown: spinner, length, check box or the mount list."""
@@ -22,7 +23,13 @@ RESET_ID = "reset"
 """Input id of the reset button."""
 
 PRIVACY_ID = "privacy"
-"""Input id of the privacy policy button."""
+"""Input id of the button that opens the online privacy policy."""
+
+PRIVACY_GROUP_ID = "g_privacy"
+"""Input id of the collapsed group with the privacy policy text."""
+
+POLICY_TEXT_ID = "policy_text"
+"""Input id of the text box with the privacy policy."""
 
 SUMMARY_ID = "summary"
 """Input id of the summary text box."""
@@ -219,15 +226,15 @@ class SettingsDialog:
         editing: Whether the dialog edits a system already in the design.
     """
 
-    def __init__(self, editing: bool, show_policy: Callable[[], None]) -> None:
+    def __init__(self, editing: bool, open_url: Callable[[str], None]) -> None:
         """Prepare a dialog; inputs are created by :meth:`build`.
 
         Args:
             editing: Whether the dialog edits a system already in the design.
-            show_policy: Shows the privacy policy.
+            open_url: Opens a web page in the browser.
         """
         self.editing = editing
-        self._show_policy = show_policy
+        self._open_url = open_url
         self._inputs: dict[str, Any] = {}
         self._summary: Any = None
 
@@ -245,15 +252,20 @@ class SettingsDialog:
             children = g.children
             for f in group.fields:
                 self._inputs[f.key] = self._add_field(children, f, s)
+        # the policy text sits in the dialog itself, collapsed above the
+        # summary so its header is visible without scrolling
+        group = inputs.addGroupCommandInput(PRIVACY_GROUP_ID, POLICY_TITLE)
+        group.isExpanded = False
+        policy = group.children.addTextBoxCommandInput(POLICY_TEXT_ID, "", policy_html(), 12, True)
+        _full_width(policy)
+        online = group.children.addBoolValueInput(
+            PRIVACY_ID, "Liana " + __version__, False, "", False
+        )
+        _set_text(online, "Open online version")
         reset = inputs.addBoolValueInput(RESET_ID, "Reset to defaults", False, "", False)
         _set_text(reset, "Reset to defaults")
         self._summary = inputs.addTextBoxCommandInput(SUMMARY_ID, "", "", 14, True)
-        try:
-            self._summary.isFullWidth = True
-        except API_ERRORS:
-            pass  # older Fusion: the summary keeps a label column
-        privacy = inputs.addBoolValueInput(PRIVACY_ID, "Liana " + __version__, False, "", False)
-        _set_text(privacy, "Privacy policy")
+        _full_width(self._summary)
 
     @staticmethod
     def _add_field(children: Any, f: Field, s: Settings) -> Any:
@@ -355,8 +367,15 @@ class SettingsDialog:
         if input_id == RESET_ID:
             self.write(DEFAULTS)
         elif input_id == PRIVACY_ID:
-            self._show_policy()
+            self._open_url(POLICY_URL)
         self.refresh()
+
+
+def _full_width(text_box: Any) -> None:
+    try:
+        text_box.isFullWidth = True
+    except API_ERRORS:
+        pass  # older Fusion: the text keeps a label column
 
 
 def _set_text(button: Any, text: str) -> None:
