@@ -1,14 +1,19 @@
 name: Release
 
+# A release starts in one of two ways: pushing a tag vX.Y.Z, or running this
+# workflow on main from the Actions tab, which tags the current commit with
+# the version from pyproject.toml.
 on:
   push:
     tags: ["v*"]
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
   release:
+    if: github.event_name == 'push' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -20,23 +25,33 @@ jobs:
       - run: python -m pip install -r requirements-dev.txt
       - run: python scripts/check.py
       - name: Tag matches the version
+        id: tag
         shell: bash
         run: |
           version="$(python scripts/bump_version.py --check | awk '{print $2}')"
-          test "v${version}" = "${GITHUB_REF_NAME}"
+          case "$version" in
+            *-dev*) echo "version $version is a development version"; exit 1 ;;
+          esac
+          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            test "v${version}" = "${GITHUB_REF_NAME}"
+          elif git rev-parse -q --verify "refs/tags/v${version}" >/dev/null; then
+            echo "tag v${version} already exists"; exit 1
+          fi
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
       - name: Build; the archive must carry the tagged version
         shell: bash
-        run: python scripts/build.py --expect-version "${GITHUB_REF_NAME#v}"
+        run: python scripts/build.py --expect-version "${{ steps.tag.outputs.version }}"
       - name: Publish the release
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.tag.outputs.version }}
         run: |
-          version="${GITHUB_REF_NAME#v}"
-          awk -v v="$version" '
+          awk -v v="$VERSION" '
             $0 ~ "^## \\[" v "\\]" {on=1; next}
             on && /^## \[/ {exit}
             on {print}
           ' CHANGELOG.md > notes.md
-          gh release create "$GITHUB_REF_NAME" dist/Liana-*.zip dist/Liana-*.zip.sha256 \
-            --title "Liana $version" --notes-file notes.md
+          test -s notes.md
+          gh release create "v$VERSION" dist/Liana-*.zip dist/Liana-*.zip.sha256 \
+            --target "$GITHUB_SHA" --title "Liana $VERSION" --notes-file notes.md

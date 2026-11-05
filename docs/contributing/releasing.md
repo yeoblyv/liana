@@ -63,16 +63,23 @@ writes `dist/Liana-<version>.zip` with one `Liana` folder inside, and
    `chore(release): 1.1.0`.
 3. Build and run the [manual checks in Fusion](fusion-test-checklist.md)
    on Windows and macOS.
-4. Tag and push:
+4. Push the commit and start the release in one of two ways:
 
-   ```bash
-   git tag -s v1.1.0 -m "Liana 1.1.0"
-   git push origin main v1.1.0
-   ```
+   - push a signed tag:
+
+     ```bash
+     git tag -s v1.1.0 -m "Liana 1.1.0"
+     git push origin main v1.1.0
+     ```
+
+   - or open **Actions > Release** on GitHub and click **Run workflow**
+     on `main`; the workflow tags the commit with the version from
+     `pyproject.toml`.
 
 5. The release workflow runs the gates, checks that the tag, the manifest
-   and the version inside the built archive are identical, and publishes
-   the archive with its checksum and the changelog section as notes.
+   and the version inside the built archive are identical, refuses a
+   `-dev` version or a tag that already exists, and publishes the archive
+   with its checksum and the changelog section as notes.
 
 ## After the release
 
