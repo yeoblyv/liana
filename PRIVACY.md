@@ -3,7 +3,7 @@
 Last updated: 5 November 2026.
 
 Liana is an add-in for Autodesk Fusion published by Yehor Oblyvantsov,
-Groningen, the Netherlands. Contact: support@oblyvantsov.net.
+Groningen, the Netherlands. Contact: xineraman8@gmail.com.
 
 The same text is in Liana itself: open the Liana dialog and expand
 Privacy policy.
@@ -70,7 +70,7 @@ All data stays under your control:
   settings.
 - To delete the values saved in a design, delete the design.
 
-If you write to support@oblyvantsov.net, your message and address are used
+If you write to xineraman8@gmail.com, your message and address are used
 only to answer you. They are deleted on request; write to the same address
 to ask for that. Issues opened on GitHub are public and are covered by
 GitHub's privacy statement.

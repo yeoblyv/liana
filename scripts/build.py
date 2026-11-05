@@ -59,8 +59,8 @@ BUNDLE = "Liana.bundle"
 
 PUBLISHER = {
     "Name": "Yehor Oblyvantsov",
-    "Url": "https://oblyvantsov.net",
-    "Email": "support@oblyvantsov.net",
+    "Url": "https://github.com/yeoblyv/liana",
+    "Email": "xineraman8@gmail.com",
 }
 """Publisher details written into ``PackageContents.xml``."""
 

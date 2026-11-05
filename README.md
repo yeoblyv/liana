@@ -73,7 +73,7 @@ group of the Liana dialog.
 ## Support
 
 Questions and bug reports: [GitHub issues](https://github.com/yeoblyv/liana/issues)
-or support@oblyvantsov.net. Security problems: see [SECURITY.md](SECURITY.md).
+or xineraman8@gmail.com. Security problems: see [SECURITY.md](SECURITY.md).
 
 ## Development
 

@@ -29,7 +29,7 @@ def test_package_contents_describes_the_bundle() -> None:
     help_file = root.get("HelpFile", "")
     assert help_file == "./Contents/" + HELP_FILE.relative_to(ADDIN).as_posix()
     company = root.find("CompanyDetails")
-    assert company is not None and company.get("Email") == "support@oblyvantsov.net"
+    assert company is not None and company.get("Email") == "xineraman8@gmail.com"
     requirements = root.find("Components/RuntimeRequirements")
     assert requirements is not None and requirements.get("OS") == "Win64|MacOS"
     entry = root.find("Components/ComponentEntry")
