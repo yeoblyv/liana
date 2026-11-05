@@ -335,10 +335,10 @@ class SettingsDialog:
                 # Fusion redraws a spinner only when its value changes, so
                 # text typed over it (letters, nothing) would survive a value
                 # equal to the last valid one: step to another value first.
-                wanted = int(values[key])
+                count = int(values[key])
                 lo, hi = (int(limit) for limit in LIMITS[key])
-                inp.value = lo if wanted != lo else hi
-                inp.value = wanted
+                inp.value = lo if count != lo else hi
+                inp.value = count
             elif kind == "mm":
                 # the expression, not the value, for the same reason
                 inp.expression = "%g mm" % float(values[key])
