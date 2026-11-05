@@ -1,0 +1,13 @@
+{
+	"autodeskProduct": "Fusion",
+	"type": "addin",
+	"id": "69b49b49-20bf-41ea-9d45-b50663e771ea",
+	"author": "Yehor Oblyvantsov",
+	"description": {
+		"": "Liana: parametric under-desk cable holders (1-15 cradles), X-frame and zip-tie mount, with a settings dialog"
+	},
+	"version": "1.0.0",
+	"runOnStartup": true,
+	"supportedOS": "windows|mac",
+	"editEnabled": true
+}
