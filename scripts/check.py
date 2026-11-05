@@ -18,7 +18,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from _project import ROOT
+from _project import ROOT, git
 
 SOURCE_DIRS = ("src", "tests", "scripts")
 """Folders with Python sources."""
@@ -43,10 +43,20 @@ SECRET_PATTERNS = (
 )
 """Shapes of private keys and access tokens that must never be committed."""
 
-_SKIP_PARTS = {".git", ".venv", "dist", "__pycache__", "golden"}
+_SKIP_PARTS = {".git", ".venv", "dist", "__pycache__", ".mypy_cache", ".pytest_cache", "golden"}
 
 
 def _files() -> list[Path]:
+    """Return the files to check: those git tracks, or all of them without git.
+
+    Tools write caches into the tree (with the platform's line endings), so
+    only tracked files describe the repository.
+    """
+    listed = git("ls-files", "-z")
+    if listed is not None:
+        names = [n for n in listed.split("\0") if n]
+        paths = [ROOT / n for n in names if not _SKIP_PARTS.intersection(Path(n).parts)]
+        return sorted(p for p in paths if p.is_file())
     out = []
     for path in sorted(ROOT.rglob("*")):
         rel = path.relative_to(ROOT)
