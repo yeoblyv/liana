@@ -24,7 +24,9 @@ jobs:
         run: |
           version="$(python scripts/bump_version.py --check | awk '{print $2}')"
           test "v${version}" = "${GITHUB_REF_NAME}"
-      - run: python scripts/build.py
+      - name: Build; the archive must carry the tagged version
+        shell: bash
+        run: python scripts/build.py --expect-version "${GITHUB_REF_NAME#v}"
       - name: Publish the release
         shell: bash
         env:

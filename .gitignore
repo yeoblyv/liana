@@ -1,22 +1,43 @@
+# Build output - never commit archives or release artifacts
+/dist/
+/release/
+/build/
+/bin/
+*.exe
+*.dll
+*.so
+*.dylib
+*.o
+*.obj
+*.a
+*.zip
+
+# Environment and secrets
+.env
+.env.*
+*.local
+
+# OS cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor cruft
+.idea/
+.vscode/
+*.swp
+
 # Python
 __pycache__/
-*.py[cod]
+*.pyc
 .venv/
+venv/
 .mypy_cache/
 .pytest_cache/
 .coverage
 coverage.xml
 htmlcov/
 
-# Build output
-dist/
-
 # Files the add-in writes when it runs from the source folder
-src/Liana/last_settings.json
-src/Liana/build_log.txt
-
-# Editors and operating systems
-.vscode/
-.idea/
-.DS_Store
-Thumbs.db
+/src/Liana/last_settings.json
+/src/Liana/build_log.txt

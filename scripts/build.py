@@ -13,11 +13,15 @@ unpacked over an older build would otherwise keep running the old code.
 
 Usage:
     python scripts/build.py
+    python scripts/build.py --expect-version 1.0.0   # fail unless the build carries it
 """
 
 from __future__ import annotations
 
+import argparse
 import hashlib
+import json
+import re
 import stat
 import sys
 import time
@@ -107,13 +111,32 @@ def build(version: str) -> Path:
     return archive
 
 
-def main() -> int:
+def archive_versions(archive: Path) -> tuple[str, str]:
+    """Return the versions stamped into an archive: manifest and ``_version.py``."""
+    with zipfile.ZipFile(archive) as zf:
+        manifest = json.loads(zf.read("Liana/Liana.manifest").decode("utf-8"))["version"]
+        module = re.search(
+            r'__version__ = "([^"]+)"', zf.read("Liana/_version.py").decode("utf-8")
+        )
+    return str(manifest), module.group(1) if module else ""
+
+
+def main(argv: list[str]) -> int:
     """Command line entry point."""
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("--expect-version", help="fail unless the archive carries this version")
+    args = parser.parse_args(argv)
     archive = build(build_version(project_version()))
     print(archive.relative_to(ROOT).as_posix())
     print(archive.with_name(archive.name + ".sha256").read_text(encoding="utf-8").strip())
+    if args.expect_version is not None:
+        stamped = archive_versions(archive)
+        if stamped != (args.expect_version, args.expect_version):
+            print("archive carries %s, expected %s" % (stamped, args.expect_version))
+            return 1
+        print("archive carries version %s" % args.expect_version)
     return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv[1:]))
