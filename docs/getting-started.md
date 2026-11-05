@@ -15,9 +15,10 @@ Windows or macOS.
 1. Download `Liana-<version>.zip` from the
    [releases page](https://github.com/yeoblyv/liana/releases). The file
    `Liana-<version>.zip.sha256` next to it holds its SHA-256 checksum.
-2. Unpack the archive. Keep the folder named `Liana`; Fusion expects the
-   folder, the `Liana.py` file and the `Liana.manifest` file to share one
-   name [R2].
+2. Unpack the archive. Inside is a folder named `Liana` (on Windows,
+   **Extract All** puts it in a folder named after the archive). Use that
+   inner folder and keep its name: Fusion expects the folder, the
+   `Liana.py` file and the `Liana.manifest` file to share one name [R2].
 3. Move the folder somewhere permanent, for example `Documents\Fusion
    add-ins\Liana`. Fusion loads the add-in from wherever you add it.
 4. In Fusion, open **Utilities > Add-Ins > Scripts and Add-Ins**.
@@ -57,14 +58,20 @@ details; the parts are still usable.
   User Parameter. Change one and the model follows.
 - **Layout:** run **Solid > Create > Liana** on the same design. The dialog
   opens with the settings of that design. If only sizes change, the
-  parameters are updated in place; a new cradle count, pin or set of parts
-  rebuilds the system in the same design.
+  parameters are updated in place; a change to the layout rebuilds the
+  system in the same design (the [user guide](user-guide.md#editing-a-system)
+  lists what counts as layout).
 
 ## Update
 
-Download the new release, replace the contents of your `Liana` folder with
-the new one, and restart Fusion. Your last dialog settings are kept in your
-user data folder, not in the add-in folder, so they survive the update.
+1. Quit Fusion.
+2. Delete your `Liana` add-in folder, including the `__pycache__` folders
+   inside it. Python keeps compiled copies of the code there; unpacking
+   over an old folder can leave them in use.
+3. Unpack the new release to the same place and start Fusion.
+
+Your last dialog settings are kept in your user data folder, not in the
+add-in folder, so they survive the update.
 
 ## Remove
 

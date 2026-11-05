@@ -14,7 +14,7 @@ For users:
 
 For contributors:
 
-- [Architecture](architecture.md): how the code is organised and how a build runs.
+- [Architecture](architecture.md): how the code is organized and how a build runs.
 - [Testing in Fusion](fusion-test-checklist.md): the manual checks before a release.
 - [Releasing](releasing.md): versions, builds and tags.
 - [API reference](api/README.md): generated from the docstrings.

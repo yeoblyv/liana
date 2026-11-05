@@ -1,6 +1,6 @@
 ---
 title: Architecture
-summary: How the Liana code is organised, how a build runs and how it is tested without Fusion.
+summary: How the Liana code is organized, how a build runs and how it is tested without Fusion.
 audience: contributors
 updated: 2026-11-05
 ---
@@ -22,7 +22,7 @@ sketches stay parametric, and the test strategy.
 | `src/Liana/handlers.py` | Fusion event handler classes that forward to callables and report errors. |
 | `src/Liana/storage.py` | Last settings and build log in the user data folder, written atomically. |
 | `src/Liana/core/` | Pure Python, no Fusion imports: settings, layout arithmetic, User Parameters, expression builders, texts. |
-| `src/Liana/cad/` | Modelling with the Fusion API: sketches, features, the four parts, colours and the system. |
+| `src/Liana/cad/` | Modelling with the Fusion API: sketches, features, the four parts, colors and the system. |
 | `tests/` | Tests, including an in-memory stand-in for the Fusion API (`tests/fake_adsk`). |
 | `scripts/` | Quality gates, build, version bump, API docs, golden traces. |
 
@@ -77,11 +77,16 @@ wrong result is deleted and the other direction is tried.
 ## Errors
 
 Calls that Fusion may refuse are wrapped in `except cad.api.API_ERRORS`
-(RuntimeError, AttributeError, NotImplementedError). A broad
-`except Exception` appears only at boundaries where any failure must be
-contained: optional finishing steps, one part of a build, the rebuild
-fallback, and the event handlers, because Fusion drops exceptions raised
-in a handler without telling the user.
+(RuntimeError, AttributeError, NotImplementedError, TypeError, ValueError).
+A broad `except Exception` appears only at boundaries where any failure
+must be contained: optional finishing steps, one part of a build, the
+rebuild fallback, `LianaAddIn.start` and `stop`, and the event handlers,
+because Fusion drops exceptions raised in a handler without telling the
+user.
+
+Settings read back from a file, a design or the build event are untrusted:
+`core.settings.from_mapping(..., within_limits=True)` keeps only known keys
+with the right type and finite values inside the dialog limits.
 
 ## State
 

@@ -25,7 +25,7 @@ design, so a cut in one part never reaches another.
 
 ## Dialog settings
 
-Lengths are in millimetres. The summary at the bottom of the dialog updates
+Lengths are in millimeters. The summary at the bottom of the dialog updates
 as you type: cradle count and pitch, part sizes against the printer bed,
 the largest cradle count that fits, the hardware and the screw engagement.
 **Generate** stays off while a problem is listed there.
@@ -96,9 +96,12 @@ settings ("Editing the system in this design"). Then:
 
 - If only sizes change, the User Parameters are updated in place and the
   model recomputes.
-- If the layout changes (cradle count, T-pin, side screws, parts, frame
-  preview), the system is rebuilt in the same design. Edits you made to the
-  generated parts by hand are lost.
+- If the layout changes, the system is rebuilt in the same design. Edits
+  you made to the generated parts by hand are lost. The layout is: the
+  cradle count, the T-pin and its side screws, raised teeth, the set of
+  parts, the frame preview, and the face the nut seats open to, which
+  depends on the cable diameter (small cables get seats that open to the
+  face the cables pass through).
 
 Liana finds its system through markers it stores on the components.
 Renaming components is fine; after deleting them the next run builds a new

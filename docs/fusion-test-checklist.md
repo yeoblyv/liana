@@ -14,7 +14,8 @@ the operating system with the results.
 
 ## Install and start
 
-1. Unpack `dist/Liana-<version>.zip` and add the `Liana` folder with
+1. Unpack `dist/Liana-<version>.zip` into a new, empty folder (never over
+   an earlier build) and add the inner `Liana` folder with
    **Utilities > Add-Ins > Scripts and Add-Ins > + > Script or add-in from
    device**.
 2. Click **Run**. No error message appears.
@@ -28,8 +29,8 @@ the operating system with the results.
 1. Open the dialog in an empty design. The summary starts with
    "10 cradles", all groups are present, and the version next to
    **Privacy policy** matches the release.
-2. Set cradles to 3: **Center T-pin** is greyed out.
-3. Untick **X-frame**: **Show holders on the frame** is greyed out.
+2. Set cradles to 3: **Center T-pin** is grayed out.
+3. Untick **X-frame**: **Show holders on the frame** is grayed out.
 4. Set the bed to 100 x 100: the summary marks parts that do not fit and
    **Generate** is off. Restore the bed size.
 5. Type an invalid length such as `abc`: **Generate** is off.
@@ -42,9 +43,9 @@ For each row, build into a new empty design and check the result.
 
 | Settings | Check |
 |----------|-------|
-| Defaults | Rail, comb, frame with 4 holder copies, tie mount; colours red, green, blue, green; the message reports no skipped features. |
+| Defaults | Rail, comb, frame with 4 holder copies, tie mount; colors red, green, blue, green; the message reports no skipped features. |
 | Cradles 1, cable 6 mm | Builds; summary says "no T-pin". |
-| Cradles 5 | T-pin half a pitch off centre; 4 table screws if the summary says so. |
+| Cradles 5 | T-pin half a pitch off center; 4 table screws if the summary says so. |
 | Cradles 15, cable 3 mm | Builds; the nut seats open to the face the cables pass through. |
 | Cable 25 mm, cradles 2 | Builds; the nut seats open to the end faces of the rail. |
 | Mount T | Frame shows 3 holder copies. |

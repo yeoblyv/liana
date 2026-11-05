@@ -33,7 +33,7 @@ with LF line endings. Commit only when it passes.
 - **Docstrings.** Every public module, class, function, method and constant
   has a Google-style docstring. After changing one, run
   `python scripts/gen_api_docs.py` and commit `docs/api` with the change.
-- **Tests.** Every behaviour change comes with a test. The golden tests
+- **Tests.** Every behavior change comes with a test. The golden tests
   (`tests/test_golden.py`) compare every call Liana makes to the Fusion API
   with the traces in `tests/golden`. When a change to the model is
   intended, check it in Fusion, then record new traces with

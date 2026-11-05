@@ -31,8 +31,11 @@ python scripts/build.py
 ```
 
 writes `dist/Liana-<version>.zip` with a `Liana` folder inside, and
-`dist/Liana-<version>.zip.sha256`. The archive is reproducible: the same
-sources give the same bytes.
+`dist/Liana-<version>.zip.sha256`. Only files tracked by git are packed.
+The entries are dated with the commit time, so one commit built with the
+same Python gives the same bytes. (The compressed bytes can differ between
+Python builds that link different zlib versions.) A build with uncommitted
+changes is dated with the current time.
 
 A build of a commit that is not tagged `v<version>` gets the version
 `<version>+g<commit>`, with `.dirty` appended when the working tree has

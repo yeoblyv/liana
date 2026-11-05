@@ -8,7 +8,8 @@ mount. Every size is a User Parameter, so the design stays editable.
 
 1. Download `Liana-<version>.zip` from the
    [releases page](https://github.com/yeoblyv/liana/releases) and unpack it.
-   You get a folder named `Liana`.
+   Inside is a folder named `Liana` (Windows' **Extract All** puts it in a
+   folder named after the archive).
 2. In Fusion, open **Utilities > Add-Ins > Scripts and Add-Ins**, click
    **+** and choose **Script or add-in from device**, then select the
    `Liana` folder.
@@ -33,7 +34,7 @@ removing the add-in.
 The dialog checks every part against your printer bed and keeps
 **Generate** off until everything fits. Running Liana again on the same
 design edits the system: size changes update the parameters in place,
-layout changes rebuild it. See the [user guide](docs/user-guide.md) for
+changes to the layout rebuild it. See the [user guide](docs/user-guide.md) for
 every setting, printing and assembly.
 
 ## Hardware
